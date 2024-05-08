@@ -1,0 +1,48 @@
+/* Général */
+
+* {
+    background-color: #FFFEF8;
+}
+
+/* Formulaire de login */
+
+#formulaire_login h2 {
+    margin: 50px 0; 
+}
+
+#formulaire_login {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    }
+    
+    .formulaire {
+        display: flex;
+        flex-direction: column;
+        width: 30%;
+        gap: 20px;
+    }
+    
+    #formulaire_login input {
+        height: 30px;
+        text-align: center;
+        border: none;
+        box-shadow: 0 4px 14px rgba(0, 0, 0, 0.09);
+    }
+    
+    .formulaire ::placeholder  {
+        text-align: center;
+    }
+    
+    .mdpOublie {
+        color: inherit;
+        text-align: center;
+        text-decoration: underline;
+        margin-top: -15px;
+    }
+
+/* Header */
+
+.connexion {
+    font-weight: bold;
+}
