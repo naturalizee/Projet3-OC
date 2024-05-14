@@ -1,0 +1,66 @@
+/* Général */
+
+* {
+    background-color: #FFFEF8;
+}
+
+/* Formulaire de login */
+
+#formulaire_login h2 {
+    margin: 50px 0;
+}
+
+#formulaire_login {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.formulaire {
+    display: flex;
+    flex-direction: column;
+    width: 30%;
+    gap: 20px;
+}
+
+#formulaire_login input {
+    height: 30px;
+    border: none;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.09);
+}
+
+.mdpOublie {
+    color: inherit;
+    text-align: center;
+    text-decoration: underline;
+    margin-top: -15px;
+}
+
+#seConnecter:active {
+    background-color: #145041;
+    transform: scale(1.1);
+}
+
+/* Mot de passe */
+.password-container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+#password {
+    width: 90%;
+}
+
+/* Header */
+
+.connexion {
+    font-weight: bold;
+}
+
+/* footer */
+
+footer {
+    height: 60px;
+    margin-top: 100px;
+}

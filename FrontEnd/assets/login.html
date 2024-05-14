@@ -10,9 +10,10 @@
     <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Work+Sans&display=swap"
         rel="stylesheet">
     <meta name="description" content="">
-    <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="login.css">
-    <script src="login.js" defer></script>
+    <script rel="preconnect" src="https://kit.fontawesome.com/25db7173f3.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="./css/style.css">
+    <link rel="stylesheet" href="./css/login.css">
+    <script src="./javascript/login.js" defer></script>
 </head>
 
 <body>
@@ -35,8 +36,13 @@
             <div class="formulaire">
                 <label for="email">E-mail</label>
                 <input type="email" name="email" id="email">
-                <label for="mdp">Mot de passe</label>
-                <input type="password" name="mdp" id="mdp">
+                <div class="password-container">
+                    <label for="password">Mot de passe</label>
+                    <div class="input-container">
+                        <input type="password" name="password" id="password">
+                        <i id="toggle-password" class="fa-solid fa-eye-slash"></i>
+                    </div>
+                </div>
                 <input type="submit" name="seConnecter" id="seConnecter" value="Se connecter">
                 <a href="#" class="mdpOublie">Mot de passe oublié</a>
             </div>
