@@ -11,6 +11,7 @@ async function fetchTravauxEtCategories() {
 
 // Afficher dynamiquement les travaux avec la possibilité de filtrer par catégorie
 async function afficherTravaux() {
+    try {
     const { travaux, categories } = await fetchTravauxEtCategories();
 
     // Création d'une div d'affichage des projets
@@ -53,7 +54,10 @@ async function afficherTravaux() {
 
     // Afficher tous les travaux par défaut
     afficherTravauxParCategorie(travaux);
-}
+} catch (error) {
+    afficherMessageErreur("Une erreur est survenue avec l'hôte distant")
+            console.error("Une erreur est survenue:", error);
+}}
 
 // Fonction pour afficher les travaux d'une catégorie spécifique
 function afficherTravauxParCategorie(travaux) {
@@ -74,3 +78,19 @@ function afficherTravauxParCategorie(travaux) {
 
 // Appel de la fonction pour afficher les travaux avec les filtres par catégorie
 afficherTravaux();
+
+
+// Message d'erreur connexion
+const portfolio = document.getElementById("portfolio")
+function afficherMessageErreur(message) {
+    const erreurPrecedente = document.querySelector(".message-erreur")
+    if (erreurPrecedente) {
+        erreurPrecedente.remove()
+    }
+    const erreurMessage = document.createElement("p");
+    erreurMessage.classList.add("message-erreur")
+    erreurMessage.textContent = message;
+    erreurMessage.style.color = "red";
+    erreurMessage.style.marginBottom = "10px";
+    portfolio.appendChild(erreurMessage)
+}

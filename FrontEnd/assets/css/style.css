@@ -296,6 +296,12 @@ a:visited:not(.mdpOublie) {
 	text-decoration: none;
 }
 
+/* Header */
+
+.projets {
+    font-weight: bold;
+}
+
 /* Boutons de filtres de catégories */
 
 .filtres {
