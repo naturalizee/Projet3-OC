@@ -23,10 +23,10 @@ async function login(event) {
             window.location.href = "../index.html";
             console.log("Connexion réussie");
         } else {
-            afficherMessageErreur("L'adresse mail ou le mot de passe est incorrect")
+            afficherMessage("L'adresse mail ou le mot de passe est incorrect")
         }
     } catch (error) {
-        afficherMessageErreur("Une erreur est survenue")
+        afficherMessage("Une erreur est survenue")
         console.error("Erreur lors de la connexion:", error);
     }
 }
@@ -51,10 +51,10 @@ async function login(event) {
             window.location.href = "../../index.html";
             console.log("Connexion réussie");
         } else {
-            afficherMessageErreur("L'adresse mail ou le mot de passe est incorrect")
+            afficherMessage("L'adresse mail ou le mot de passe est incorrect")
         }
     } catch (error) {
-        afficherMessageErreur("Une erreur est survenue")
+        afficherMessage("Une erreur est survenue")
         console.error("Erreur lors de la connexion:", error);
     }
 }
@@ -71,7 +71,7 @@ if (localStorage.getItem("token")) {
 }
 
 // Message d'erreur mail ou mdp
-function afficherMessageErreur(message) {
+function afficherMessage(message) {
     const erreurPrecedente = document.querySelector(".message-erreur")
     if (erreurPrecedente) {
         erreurPrecedente.remove()

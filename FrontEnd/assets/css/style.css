@@ -302,6 +302,10 @@ a:visited:not(.mdpOublie) {
     font-weight: bold;
 }
 
+li.LogOut {
+	display: block;
+}
+
 /* Boutons de filtres de catégories */
 
 .filtres {

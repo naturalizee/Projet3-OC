@@ -55,7 +55,7 @@ async function afficherTravaux() {
     // Afficher tous les travaux par défaut
     afficherTravauxParCategorie(travaux);
 } catch (error) {
-    afficherMessageErreur("Une erreur est survenue avec l'hôte distant")
+    afficherMessage("Une erreur est survenue avec l'hôte distant")
             console.error("Une erreur est survenue:", error);
 }}
 
@@ -82,7 +82,7 @@ afficherTravaux();
 
 // Message d'erreur connexion
 const portfolio = document.getElementById("portfolio")
-function afficherMessageErreur(message) {
+function afficherMessage(message) {
     const erreurPrecedente = document.querySelector(".message-erreur")
     if (erreurPrecedente) {
         erreurPrecedente.remove()
