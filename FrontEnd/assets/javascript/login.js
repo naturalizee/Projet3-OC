@@ -21,7 +21,7 @@ async function login(event) {
 
         if (data.token) {
             localStorage.setItem("token", data.token);
-            window.location.href = "../html/index-admin.html";
+            window.location.href = "../../index.html";
             console.log("Connexion réussie");
             console.log("Token trouvé :", localStorage.getItem("token"));
         } else {

@@ -11,12 +11,17 @@
         rel="stylesheet">
     <meta name="description" content="">
     <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/index-admin.css">
+    <script src="https://kit.fontawesome.com/25db7173f3.js" crossorigin="anonymous"></script>
     <script src="../javascript/index.js" defer></script>
     <script src="../javascript/logout.js" defer></script>
+    <script src="../javascript/index-admin.js" defer></script>
 </head>
 
 <body>
+    <div class="mode-edition"><i class="fa-solid fa-pen-to-square"></i> Mode édition</div>
     <header>
+        
         <h1>Sophie Bluel <span>Architecte d'intérieur</span></h1>
         <nav>
             <ul>
@@ -44,7 +49,10 @@
             </article>
         </section>
         <section id="portfolio">
-            <h2>Mes Projets</h2>
+            <div class="titre-admin">
+                <h2>Mes Projets</h2>
+                <a href="#"><i class="fa-regular fa-pen-to-square"></i>modifier</a>
+            </div>
             <!-- Filtres de catégorie -->
             <!-- Récupération des travaux depuis l'API -->
         </section>

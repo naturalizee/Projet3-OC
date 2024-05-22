@@ -39,6 +39,7 @@ async function afficherTravaux() {
         const boutonCat = document.createElement("button");
         boutonCat.textContent = cat.name;
         boutonCat.id = "bouton-" + cat.id;
+        boutonCat.classList = "btnCat"
         boutonCat.name = cat.id;
         // Ajout du gestionnaire d'événements pour afficher les travaux de la catégorie sélectionnée
         boutonCat.addEventListener('click', () => {
