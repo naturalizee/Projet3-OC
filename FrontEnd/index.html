@@ -14,6 +14,7 @@
 	<script src="https://kit.fontawesome.com/25db7173f3.js" crossorigin="anonymous"></script>
 	<script src="./assets/javascript/index.js" defer></script>
 	<script src="./assets/javascript/index-admin.js" defer></script>
+	<script src="./assets/javascript/modal.js" defer></script>
 	<script src="./assets/javascript/logout.js" defer></script>
 </head>
 
@@ -30,6 +31,7 @@
 		</nav>
 	</header>
 	<main>
+
 		<section id="introduction">
 			<figure>
 				<img src="./assets/images/sophie-bluel.png" alt="">
@@ -47,6 +49,12 @@
 		</section>
 		<section id="portfolio">
 			<h2 class="mesProjets">Mes Projets</h2>
+			<a href="#" class="js-open-modal-trigger" style="display: none;">Modifier</a>
+			<aside class="js-open-modal" aria-hidden="true" role="dialog" style="display: none;">
+				<a href="#" class="js-close-modal">Fermer</a>
+				<!-- Contenu de modal ici -->
+				<p>Test lalalalalalala</p>
+			</aside>
 			<!-- Filtres de catégorie -->
 			<!-- Récupération des travaux depuis l'API -->
 		</section>

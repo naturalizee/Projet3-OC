@@ -34,10 +34,6 @@ async function login(event) {
 }
 
 
-// AJOUTER LOGOUT AVEC SUPPRESSION TOKEN  CHANGER LOGIN EN LOGOUT MENU QUAND CO
-// LOGOUT QUAND STOP PAGE
-
-
 // Message d'erreur mail ou mdp
 function afficherMessage(message) {
     const erreurPrecedente = document.querySelector(".message-erreur")

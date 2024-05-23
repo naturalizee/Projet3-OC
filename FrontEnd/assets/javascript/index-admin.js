@@ -3,7 +3,7 @@ const header = document.querySelector("header")
 const mesProjets = document.querySelector(".mesProjets")
 const login = document.querySelector(".login")
 const instagram = document.querySelector(".instagram")
-
+const openModalHTML = document.querySelector(".js-open-modal-trigger")
 
 // Création bandeau d'édition
 let bandeauEditionHTML = ` 
@@ -27,14 +27,6 @@ let bandeauEditionHTML = `
 header.insertAdjacentHTML('beforebegin', bandeauEditionHTML);
 header.style.paddingTop = "calc(+50px)";
 
-// Création bouton modifier
-let boutonModifierHTML = `
-        <div class="boutonModifier"
-        style="
-        display:none";>
-        Modifier</div>`;
-mesProjets.insertAdjacentHTML('afterend', boutonModifierHTML);
-
 // Création nav Logout
 let LogOutHTML = document.createElement("li");
 LogOutHTML.className = "LogOut";
@@ -48,19 +40,20 @@ const bandeauEdition = document.querySelector(".bandeauEdition")
 const boutonModifier = document.querySelector(".boutonModifier")
 const LogOut = document.querySelector(".LogOut")
 
-// Apparition du bandeau et du bouton
-function apparitionEdition() {
-    const verifConnection =
-        localStorage.getItem("token")
-    if (verifConnection) {
-        boutonModifier.style.display = "block"
-        bandeauEdition.style.display = "block"
-        login.style.display = "none"
-        LogOut.style.display = "block"
+//Apparition du bandeau et du bouton
 
-        console.log("ok")
+function apparitionEdition() {
+    const verifConnection = localStorage.getItem("token");
+    console.log("Token vérifié:", verifConnection);
+
+    if (verifConnection) {
+        openModalHTML.style.display = "block";
+        bandeauEdition.style.display = "block";
+        login.style.display = "none";
+        LogOut.style.display = "block";
+        console.log("ok");
     } else {
-        console.log("Erreur !")
+        console.log("Erreur !");
     }
 }
 
