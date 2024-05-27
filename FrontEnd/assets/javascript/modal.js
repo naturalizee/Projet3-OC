@@ -69,6 +69,8 @@ async function afficherTravaux() {
             return;
         }
 
+        ajoutPhotoContainer.innerHTML = '';
+
         travaux.forEach(travail => {
             const imageContainer = document.createElement('div');
             imageContainer.classList.add('imageContainer');
@@ -91,10 +93,47 @@ async function afficherTravaux() {
             ajoutPhotoContainer.appendChild(imageContainer);
         });
 
+        ecouteurSuppressionTravail();
+
     } catch (error) {
         console.error("Une erreur est survenue lors de l'affichage des travaux :", error);
     }
 }
 
+// Fonction pour écouter les événements de suppression
+function ecouteurSuppressionTravail() {
+    document.querySelectorAll('.poubelleIcon').forEach(icon => {
+        icon.addEventListener('click', async function () {
+            const id = this.getAttribute('data-id');
+            await supprimerTravail(id);
+        });
+    });
+}
+
+// Fonction pour supprimer un travail
+
+async function supprimerTravail(id) {
+    try {
+        const token = localStorage.getItem("token");
+        const response = await fetch(`http://localhost:5678/api/works/${id}`, {
+            method: "DELETE",
+            headers: {
+                "Authorization": `Bearer ${token}`
+            }
+        });
+        if (response.ok) {
+            console.log(`Travail avec ID ${id} supprimé.`);
+            afficherTravaux();
+        } else {
+            console.error(`Erreur lors de la suppression du travail avec ID ${id}.`);
+        }
+    } catch (error) {
+        console.error(`Erreur lors de la requête de suppression du travail avec ID ${id} :`, error);
+    }
+}
+
+
 // Appel de la fonction pour afficher les travaux
 afficherTravaux();
+
+
