@@ -11,6 +11,7 @@
 		rel="stylesheet">
 	<meta name="description" content="">
 	<link rel="stylesheet" href="./assets/css/style.css">
+	<link rel="stylesheet" href="./assets/css/modale.css">
 	<script src="https://kit.fontawesome.com/25db7173f3.js" crossorigin="anonymous"></script>
 	<script src="./assets/javascript/index.js" defer></script>
 	<script src="./assets/javascript/index-admin.js" defer></script>
@@ -48,12 +49,15 @@
 			</article>
 		</section>
 		<section id="portfolio">
-			<h2 class="mesProjets">Mes Projets</h2>
-			<a href="#" class="js-open-modal-trigger" style="display: none;">Modifier</a>
-			<aside class="js-open-modal" aria-hidden="true" role="dialog" style="display: none;">
-				<a href="#" class="js-close-modal">Fermer</a>
-				<!-- Contenu de modal ici -->
-				<p>Test lalalalalalala</p>
+			<div class= "titreEtModifier"><h2 class="mesProjets">Mes Projets</h2>
+			<div class=boutonModifier style="display: none;"><a href="#" class="js-open-modal-trigger"><i class="fa-regular fa-pen-to-square"></i>Modifier</a></div>
+			<aside class="Modale js-open-modal" aria-hidden="true" role="dialog" style="display: none;">
+				<a href="#" class="js-close-modal fa-solid fa-x"></a>
+				<h2 class="galeriePhoto">Galerie photo</h2>
+				<div class="ajoutPhotoContainer">
+					<!-- Contenu de la modale ici -->
+				</div>
+				<input type="button" name="ajoutPhoto" id="ajoutPhoto" value="Ajouter une photo"></input>
 			</aside>
 			<!-- Filtres de catégorie -->
 			<!-- Récupération des travaux depuis l'API -->

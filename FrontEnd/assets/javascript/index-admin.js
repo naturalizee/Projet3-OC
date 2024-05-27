@@ -3,7 +3,7 @@ const header = document.querySelector("header")
 const mesProjets = document.querySelector(".mesProjets")
 const login = document.querySelector(".login")
 const instagram = document.querySelector(".instagram")
-const openModalHTML = document.querySelector(".js-open-modal-trigger")
+
 
 // Création bandeau d'édition
 let bandeauEditionHTML = ` 
@@ -39,6 +39,7 @@ instagram.parentNode.insertBefore(LogOutHTML, instagram)
 const bandeauEdition = document.querySelector(".bandeauEdition")
 const boutonModifier = document.querySelector(".boutonModifier")
 const LogOut = document.querySelector(".LogOut")
+const openModalHTML = document.querySelector(".js-open-modal-trigger")
 
 //Apparition du bandeau et du bouton
 
@@ -49,6 +50,7 @@ function apparitionEdition() {
     if (verifConnection) {
         openModalHTML.style.display = "block";
         bandeauEdition.style.display = "block";
+        boutonModifier.style.display = "block";
         login.style.display = "none";
         LogOut.style.display = "block";
         console.log("ok");
@@ -58,3 +60,5 @@ function apparitionEdition() {
 }
 
 apparitionEdition()
+
+
