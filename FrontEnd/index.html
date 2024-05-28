@@ -50,18 +50,26 @@
 			</article>
 		</section>
 		<section id="portfolio">
-			<div class= "titreEtModifier"><h2 class="mesProjets">Mes Projets</h2>
-			<div class=boutonModifier style="display: none;"><a href="#" class="js-open-modal-trigger"><i class="fa-regular fa-pen-to-square"></i>Modifier</a></div>
-			<aside class="Modale js-open-modal" aria-hidden="true" role="dialog" style="display: none;">
-				<a href="#" class="js-close-modal fa-solid fa-x"></a>
-				<h2 class="galeriePhoto">Galerie photo</h2>
-				<div class="ajoutPhotoContainer">
-					<!-- Contenu de la modale ici -->
+			<div class="titreEtModifier">
+				<h2 class="mesProjets">Mes Projets</h2>
+				<div class="boutonModifier , js-open-modal-trigger" style="display: none;">
+					<i class="fa-regular fa-pen-to-square"></i>Modifier
 				</div>
-				<input type="button" name="ajoutPhoto" id="ajoutPhoto" value="Ajouter une photo"></input>
-			</aside>
-			<!-- Filtres de catégorie -->
-			<!-- Récupération des travaux depuis l'API -->
+				<aside class="Modale js-open-modal" aria-hidden="true" role="dialog" style="display: none;">
+					<a href="#" class="js-close-modal fa-solid fa-x"></a>
+					<h2 class="galeriePhoto">Galerie photo</h2>
+					<div class="ajoutPhotoContainer">
+						<!-- Contenu de la modale insérée dynamiquement ici -->
+					</div>
+					<button id="ajoutPhoto">Ajouter une photo</button>
+				</aside>
+			</div>
+			<div id="filtres-categories">
+				<!-- Filtres de catégorie insérés dynamiquement ici -->
+			</div>
+			<div class="gallery">
+				<!-- Galerie des travaux insérée dynamiquement ici -->
+			</div>
 		</section>
 		<section id="contact">
 			<h2>Contact</h2>
@@ -88,3 +96,5 @@
 </body>
 
 </html>
+
+

@@ -22,17 +22,19 @@ async function afficherTravaux() {
     // Création des boutons de filtre par catégorie
     const filtres = document.createElement('div');
     filtres.classList.add('filtres');
+    filtres.id = "filtres-categories";
 
     // Création du bouton "Tous" pour afficher toutes les catégories
     const tous = document.createElement("button");
     tous.textContent = "Tous";
     tous.id = "bouton-tous";
+    tous.classList = "btnTous"
     tous.name = "Tous";
     // Ajout du gestionnaire d'événements pour afficher tous les travaux
     tous.addEventListener('click', () => {
         afficherTravauxParCategorie(travaux);
     });
-    filtres.appendChild(tous);
+    filtresCategories.appendChild(tous);
 
     // Création des boutons pour chaque catégorie
     categories.forEach(cat => {
@@ -46,7 +48,8 @@ async function afficherTravaux() {
             const travauxFiltres = travaux.filter(travail => travail.category.id === cat.id);
             afficherTravauxParCategorie(travauxFiltres);
         });
-        filtres.appendChild(boutonCat);
+        const filtresCategories = document.getElementById("filtres-categories")
+        filtresCategories.appendChild(boutonCat);
     });
 
 

@@ -1,3 +1,7 @@
+/* ===================================================== */
+///     MODALE 1 - GALERIE PHOTO, SUPPRESSION PROJETS
+/* ===================================================== */
+
 // Création de l'overlay pour la modale
 const overlay = document.createElement("div");
 overlay.className = "modal-overlay";
@@ -111,7 +115,6 @@ function ecouteurSuppressionTravail() {
 }
 
 // Fonction pour supprimer un travail
-
 async function supprimerTravail(id) {
     try {
         const token = localStorage.getItem("token");
@@ -132,8 +135,98 @@ async function supprimerTravail(id) {
     }
 }
 
-
 // Appel de la fonction pour afficher les travaux
 afficherTravaux();
 
+/* ===================================================== */
+///        MODALE 2 - AJOUT PHOTO, TITRE, CATEGORIE
+/* ===================================================== */
 
+// Fonction pour ouvrir la modale d'ajout de photo
+const openAjoutPhotoModal = function (e) {
+    e.preventDefault();
+
+    // Création de la modale
+    const modaleAjoutPhoto = document.createElement("div");
+    modaleAjoutPhoto.className = "modale-ajout-photo";
+    modaleAjoutPhoto.innerHTML = `
+        <div id="intModal">
+            <div id="fondAjout">
+                <span id="logoAjout" class="fa-regular fa-image"></span>
+                <label for="photoProjet" class="styleAjoutPhoto">+ Ajouter Photo</label>
+                <input type="file" id="photoProjet" class="hide">
+                <p id="format">jpg, png: 4mo max</p>
+            </div>
+            <form id="formAjout">
+                <label id="labelTitre" for="titre">Titre</label>
+                <input id="titre" type="text" name="titre">
+                <label id="labelCategorie" for="categorie">Catégorie</label>
+                <select id="categorie" name="categorie">
+                    <option value="" disabled selected></option>
+                    <option value="Objets">Objets</option>
+                    <option value="Appartements">Appartements</option>
+                    <option value="Hotels & restaurants">Hotels & restaurants</option>
+                </select>
+                <input type="submit" id="envoyerProjet" value="Valider">
+            </form>
+            <button class="js-close-ajout-modal">Fermer</button>
+        </div>`;
+
+    // Ajout de l'overlay et de la modale au DOM si nécessaire
+    if (!document.body.contains(overlay)) {
+        document.body.appendChild(overlay);
+    }
+    document.body.appendChild(modaleAjoutPhoto);
+
+    // Affichage de la modale et de l'overlay
+    overlay.style.display = "block";
+    modaleAjoutPhoto.style.display = "block";
+    modal.style.display= "none";
+
+
+    console.log("Modale d'ajout de photo ouverte");
+
+    // Ajout des écouteurs d'événements pour fermer la modale
+    overlay.addEventListener("click", closeAjoutPhotoModal);
+    modaleAjoutPhoto.querySelector(".js-close-ajout-modal").addEventListener("click", closeAjoutPhotoModal);
+
+    // Empêcher la propagation de l'événement de clic dans la modale
+    modaleAjoutPhoto.addEventListener("click", stopPropagation);
+};
+
+// Fonction pour fermer la modale d'ajout de photo
+const closeAjoutPhotoModal = function (e) {
+    e.preventDefault();
+
+    // Cacher l'overlay et la modale
+    overlay.style.display = "none";
+    const modaleAjoutPhoto = document.querySelector(".modale-ajout-photo");
+    if (modaleAjoutPhoto) {
+        modaleAjoutPhoto.style.display = "none";
+        document.body.removeChild(modaleAjoutPhoto);
+    }
+
+    // Retirer les écouteurs d'événements
+    overlay.removeEventListener("click", closeAjoutPhotoModal);
+    if (modaleAjoutPhoto) {
+        modaleAjoutPhoto.removeEventListener("click", stopPropagation);
+    }
+
+    console.log("Modale d'ajout de photo fermée");
+};
+
+// Ajout de l'écouteur d'événement pour ouvrir la modale d'ajout de photo
+const ajoutPhotoButton = document.getElementById("ajoutPhoto");
+if (ajoutPhotoButton) {
+    ajoutPhotoButton.addEventListener("click", openAjoutPhotoModal);
+    console.log("Écouteur d'événement ajouté à 'ajoutPhoto'");
+} else {
+    console.error("L'élément avec l'ID 'ajoutPhoto' n'existe pas.");
+}
+
+// Ajout de l'écouteur d'événement pour fermer la modale avec la touche echap
+window.addEventListener("keydown", function (e) {
+    if (e.key === "Escape" || e.key === "Esc") {
+        closeAjoutPhotoModal(e);
+    }
+});

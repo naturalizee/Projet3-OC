@@ -309,13 +309,13 @@ li.LogOut {
 
 /* Boutons de filtres de catégories */
 
-.filtres {
+#filtres-categories {
 	display: flex;
 	justify-content: center;
 	margin-bottom: 50px;
 }
 
-.filtres button {
+#filtres-categories button {
 	margin: 0 5px;
 	padding: 8px;
 	background-color: white;
@@ -327,7 +327,7 @@ li.LogOut {
 	font-family: 'Syne';
 }
 
-.filtres button:focus {
+#filtres-categories button:focus {
 	background-color: #1D6154;
 	color: white;
 }

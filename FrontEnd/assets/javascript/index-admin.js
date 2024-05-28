@@ -19,7 +19,7 @@ let bandeauEditionHTML = `
     margin-top: 0px;
     box-sizing: border-box;
     position: fixed;
-    z-index: 1000;
+    z-index: 999;
     top: 0;
     left: 0;
 "><i class="fa-solid fa-pen-to-square"></i> Mode édition</div>
@@ -36,14 +36,17 @@ instagram.parentNode.insertBefore(LogOutHTML, instagram)
 
 
 //Selection des éléments DOM
+const btnCat = document.querySelectorAll(".btnCat");
+const btnTous = document.getElementById("bouton-tous");
 const bandeauEdition = document.querySelector(".bandeauEdition")
 const boutonModifier = document.querySelector(".boutonModifier")
 const LogOut = document.querySelector(".LogOut")
 const openModalHTML = document.querySelector(".js-open-modal-trigger")
+const filtresCategories = document.getElementById("filtres-categories");
 
 //Apparition du bandeau et du bouton
 
-function apparitionEdition() {
+async function apparitionEdition() {
     const verifConnection = localStorage.getItem("token");
     console.log("Token vérifié:", verifConnection);
 
@@ -51,6 +54,7 @@ function apparitionEdition() {
         openModalHTML.style.display = "block";
         bandeauEdition.style.display = "block";
         boutonModifier.style.display = "block";
+        filtresCategories.style.display = "none";
         login.style.display = "none";
         LogOut.style.display = "block";
         console.log("ok");
