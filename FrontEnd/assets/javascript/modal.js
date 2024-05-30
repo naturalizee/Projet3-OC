@@ -1,3 +1,8 @@
+import { afficherTravaux } from "./index.js";
+import { afficherMessage } from "./index.js";
+const token = localStorage.getItem("token");
+
+
 /* ===================================================== */
 ///     MODALE 1 - GALERIE PHOTO, SUPPRESSION PROJETS
 /* ===================================================== */
@@ -6,6 +11,7 @@
 const overlay = document.createElement("div");
 overlay.className = "modal-overlay";
 document.body.appendChild(overlay);
+let modal = null;
 
 // Fonction pour ouvrir la modale
 const openModal = function (e) {
@@ -63,7 +69,7 @@ async function fetchTravaux() {
 }
 
 // Fonction pour afficher les travaux dans la modale
-async function afficherTravaux() {
+async function afficherTravauxModale() {
     try {
         const travaux = await fetchTravaux();
 
@@ -126,6 +132,7 @@ async function supprimerTravail(id) {
         });
         if (response.ok) {
             console.log(`Travail avec ID ${id} supprimé.`);
+            afficherTravauxModale();
             afficherTravaux();
         } else {
             console.error(`Erreur lors de la suppression du travail avec ID ${id}.`);
@@ -136,43 +143,47 @@ async function supprimerTravail(id) {
 }
 
 // Appel de la fonction pour afficher les travaux
-afficherTravaux();
+afficherTravauxModale();
 
 /* ===================================================== */
 ///        MODALE 2 - AJOUT PHOTO, TITRE, CATEGORIE
 /* ===================================================== */
+
+const modaleAjoutPhoto = document.querySelector(".modale-ajout-photo");
 
 // Fonction pour ouvrir la modale d'ajout de photo
 const openAjoutPhotoModal = function (e) {
     e.preventDefault();
 
     // Création de la modale
-    const modaleAjoutPhoto = document.createElement("div");
-    modaleAjoutPhoto.className = "modale-ajout-photo";
     modaleAjoutPhoto.innerHTML = `
-        <div id="intModal">
-            <div id="fondAjout">
-                <span id="logoAjout" class="fa-regular fa-image"></span>
-                <label for="photoProjet" class="styleAjoutPhoto">+ Ajouter Photo</label>
-                <input type="file" id="photoProjet" class="hide">
-                <p id="format">jpg, png: 4mo max</p>
-            </div>
-            <form id="formAjout">
-                <label id="labelTitre" for="titre">Titre</label>
-                <input id="titre" type="text" name="titre">
-                <label id="labelCategorie" for="categorie">Catégorie</label>
-                <select id="categorie" name="categorie">
-                    <option value="" disabled selected></option>
-                    <option value="Objets">Objets</option>
-                    <option value="Appartements">Appartements</option>
-                    <option value="Hotels & restaurants">Hotels & restaurants</option>
-                </select>
-                <input type="submit" id="envoyerProjet" value="Valider">
-            </form>
-            <button class="js-close-ajout-modal">Fermer</button>
-        </div>`;
+<div id="intModal">
+	<div class="stop-modal">
+		<button class="fa-solid fa-arrow-left js-retour-arriere"></button>
+		<button class="fa-solid fa-xmark js-close-ajout-modal"></button>
+	</div>
+	<h3>Ajout photo</h2>
+		<div id="fondAjout">
+			<span id="logoAjout" class="fa-regular fa-image"></span>
+			<label for="photoProjet" class="styleAjoutPhoto">+ Ajouter Photo</label>
+			<input type="file" id="photoProjet" class="hide">
+			<p id="format">jpg, png: 4mo max</p>
+		</div>
+		<form id="formAjout">
+			<label id="labelTitre" for="titre">Titre</label>
+			<input id="titre" type="text" name="titre">
+			<label id="labelCategorie" for="categorie">Catégorie</label>
+			<select id="categorie" name="categorie">
+				<option value="" disabled selected></option>
+				<option value="Objets">Objets</option>
+				<option value="Appartements">Appartements</option>
+				<option value="Hotels & restaurants">Hotels & restaurants</option>
+			</select>
+			<input type="submit" id="envoyerProjet" value="Valider">
+		</form>
+</div>`;
 
-    // Ajout de l'overlay et de la modale au DOM si nécessaire
+    // Ajout de l'overlay et de la modale au DOM
     if (!document.body.contains(overlay)) {
         document.body.appendChild(overlay);
     }
@@ -181,8 +192,7 @@ const openAjoutPhotoModal = function (e) {
     // Affichage de la modale et de l'overlay
     overlay.style.display = "block";
     modaleAjoutPhoto.style.display = "block";
-    modal.style.display= "none";
-
+    modal.style.display = "none";
 
     console.log("Modale d'ajout de photo ouverte");
 
@@ -192,7 +202,121 @@ const openAjoutPhotoModal = function (e) {
 
     // Empêcher la propagation de l'événement de clic dans la modale
     modaleAjoutPhoto.addEventListener("click", stopPropagation);
+
+    // Ajout des écouteurs d'événements pour fermer la modale actuelle et ouvrir la précédente
+    modaleAjoutPhoto.querySelector(".js-retour-arriere").addEventListener("click", function (e) {
+        e.preventDefault();
+        modaleAjoutPhoto.style.display = "none";
+        openModal(e);
+    });
+
+    // Affiche l'image lorsqu'elle est sélectionnée
+    document.getElementById('photoProjet').addEventListener('change', function (event) {
+
+        const file = event.target.files[0];
+        const fondAjout = document.getElementById('fondAjout');
+
+        const reader = new FileReader();
+        reader.onload = function (e) {
+            fondAjout.innerHTML = '';
+            const image = document.createElement('img');
+            image.src = e.target.result;
+            image.style.width = '100%';
+            image.style.borderRadius = '10px';
+            fondAjout.appendChild(image);
+        };
+
+        reader.readAsDataURL(file);
+    });
+
+    setupFormListeners(); // Ajouter les écouteurs d'événements pour le formulaire après l'ouverture de la modale
 };
+
+// Fonction pour ajouter les écouteurs d'événements au formulaire
+function setupFormListeners() {
+    const titreInput = document.getElementById("titre");
+    const categorieSelect = document.getElementById("categorie");
+    const photoInput = document.getElementById("photoProjet");
+    const boutonValider = document.getElementById("envoyerProjet");
+
+    function checkInputs() {
+        if (titreInput.value && categorieSelect.value && photoInput.files.length > 0) {
+            boutonValider.style.backgroundColor = 'green';
+            boutonValider.disabled = false;
+        } else {
+            boutonValider.style.backgroundColor = 'gray';
+            boutonValider.disabled = true;
+        }
+    }
+    titreInput.addEventListener('input', checkInputs);
+    categorieSelect.addEventListener('change', checkInputs);
+    photoInput.addEventListener('change', checkInputs);
+
+    boutonValider.addEventListener("click", function (e) {
+        e.preventDefault();
+        validerProjet(titreInput, categorieSelect, photoInput);
+    });
+}
+
+// Fonction pour envoyer le projet et le stocker
+async function validerProjet(titreInput, categorieSelect, photoInput) {
+    if (!titreInput.value) {
+        afficherMessage("Veuillez ajouter un titre.");
+        return;
+    }
+    if (!categorieSelect.value) {
+        afficherMessage("Veuillez ajouter une catégorie.");
+        return;
+    }
+    if (photoInput.files.length === 0) {
+        afficherMessage("Veuillez ajouter une photo.");
+        return;
+    }
+
+    const file = photoInput.files[0];
+    const reader = new FileReader();
+    
+    reader.onload = async function () {
+        const imageUrl = reader.result;
+
+        const nouveauProjet = new FormData();
+        nouveauProjet.append("title", titreInput.value);
+        nouveauProjet.append("category", categorieSelect.value);
+        nouveauProjet.append("image", file); // Ajout de l'image correctement
+
+        try {
+            const response = await fetch('http://localhost:5678/api/works', {
+                method: 'POST',
+                headers: {
+                    "Authorization": `Bearer ${token}`
+                },
+                body: nouveauProjet
+            });
+        
+            if (response.ok) {
+                const projetAjoute = await response.json();
+        
+                // Afficher les travaux mis à jour
+                afficherTravaux();
+                afficherTravauxModale();
+                closeAjoutPhotoModal();
+            } else {
+                // Afficher le contenu de la réponse en cas d'erreur
+                console.error("Erreur lors de l'ajout du projet:", response.status, response.statusText);
+                const errorResponse = await response.json();
+                console.error("Contenu de la réponse:", errorResponse);
+                afficherMessage("Erreur lors de l'ajout du projet.");
+            }
+        } catch (error) {
+            console.error("Erreur lors de la requête POST:", error);
+            afficherMessage("Une erreur est survenue. Veuillez réessayer.");
+        }
+        
+    };
+
+    reader.readAsDataURL(file); // Lecture de l'image en tant que Data URL
+};
+
 
 // Fonction pour fermer la modale d'ajout de photo
 const closeAjoutPhotoModal = function (e) {

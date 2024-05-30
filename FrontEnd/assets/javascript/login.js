@@ -25,7 +25,7 @@ async function login(event) {
             console.log("Connexion réussie");
             console.log("Token trouvé :", localStorage.getItem("token"));
         } else {
-            afficherMessage("L'adresse mail ou le mot de passe est incorrect")
+            afficherMessage("Erreur dans l’identifiant ou le mot de passe")
         }
     } catch (error) {
         afficherMessage("Une erreur est survenue")

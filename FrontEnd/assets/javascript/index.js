@@ -10,7 +10,7 @@ async function fetchTravauxEtCategories() {
 
 
 // Afficher dynamiquement les travaux avec la possibilité de filtrer par catégorie
-async function afficherTravaux() {
+export async function afficherTravaux() {
     try {
     const { travaux, categories } = await fetchTravauxEtCategories();
 
@@ -86,7 +86,7 @@ afficherTravaux();
 
 // Message d'erreur connexion
 const portfolio = document.getElementById("portfolio")
-function afficherMessage(message) {
+export function afficherMessage(message) {
     const erreurPrecedente = document.querySelector(".message-erreur")
     if (erreurPrecedente) {
         erreurPrecedente.remove()
@@ -98,3 +98,5 @@ function afficherMessage(message) {
     erreurMessage.style.marginBottom = "10px";
     portfolio.appendChild(erreurMessage)
 }
+
+// export default afficherTravaux();
