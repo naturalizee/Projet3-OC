@@ -150,7 +150,8 @@ document.addEventListener('DOMContentLoaded', (event) => {
     ///        MODALE 2 - AJOUT PHOTO, TITRE, CATEGORIE
     /* ===================================================== */
 
-    const modaleAjoutPhoto = document.querySelector(".modale-ajout-photo");
+    const modaleAjoutPhoto = document.createElement("div");
+    modaleAjoutPhoto.className = "modale-ajout-photo";
 
     // Fonction pour ouvrir la modale d'ajout de photo
     const openAjoutPhotoModal = function (e) {
@@ -193,7 +194,9 @@ document.addEventListener('DOMContentLoaded', (event) => {
         // Affichage de la modale et de l'overlay
         overlay.style.display = "block";
         modaleAjoutPhoto.style.display = "block";
-        modal.style.display = "none";
+        if (modal) {
+            modal.style.display = "none";
+        }
 
         console.log("Modale d'ajout de photo ouverte");
 
@@ -259,8 +262,6 @@ document.addEventListener('DOMContentLoaded', (event) => {
     }
 
     // Fonction pour envoyer le projet et le stocker
-    document.getElementById("formAjout").addEventListener("submit", validerProjet);
-
     async function validerProjet(event) {
         // Empêcher le comportement par défaut du formulaire
         event.preventDefault();
