@@ -1,3 +1,5 @@
+
+
 // Récupération des catégories et travaux avec l'API
 async function fetchTravauxEtCategories() {
     const reponseTravaux = await fetch("http://localhost:5678/api/works");
