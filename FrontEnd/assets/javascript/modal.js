@@ -1,7 +1,6 @@
 import { afficherTravaux, afficherMessage } from "./index.js";
 
 document.addEventListener('DOMContentLoaded', (event) => {
-    
     const token = localStorage.getItem("token");
 
     /* ===================================================== */
@@ -14,10 +13,13 @@ document.addEventListener('DOMContentLoaded', (event) => {
     document.body.appendChild(overlay);
     let modal = null;
 
+    const target = document.querySelector(".js-open-modal");
+    target.style.display = "none";
+
     // Fonction pour ouvrir la modale
     const openModal = function (e) {
         e.preventDefault();
-        const target = document.querySelector(".js-open-modal");
+
         if (!target) {
             console.error("Modale inexistante");
             return;
@@ -152,67 +154,48 @@ document.addEventListener('DOMContentLoaded', (event) => {
 
     const modaleAjoutPhoto = document.createElement("div");
     modaleAjoutPhoto.className = "modale-ajout-photo";
+    modaleAjoutPhoto.style.display = "none"; // Masquer la modale par défaut
+    document.body.appendChild(modaleAjoutPhoto);
 
     // Fonction pour ouvrir la modale d'ajout de photo
     const openAjoutPhotoModal = function (e) {
         e.preventDefault();
 
+        // Fermer la première modale si elle est ouverte
+        if (modal) {
+            closeModal(e);
+        }
+
         // Création de la modale
         modaleAjoutPhoto.innerHTML = `
-<div id="intModal">
-    <div class="stop-modal">
-        <button class="fa-solid fa-arrow-left js-retour-arriere"></button>
-        <button class="fa-solid fa-xmark js-close-ajout-modal"></button>
-    </div>
-    <h3>Ajout photo</h2>
-    <form id="formAjout">
-        <div id="fondAjout">
-            <span id="logoAjout" class="fa-regular fa-image"></span>
-            <label for="photoProjet" class="styleAjoutPhoto">+ Ajouter Photo</label>
-            <input type="file" id="photoProjet" class="hide">
-            <p id="format">jpg, png: 4mo max</p>
-        </div>
-            <label id="labelTitre" for="titre">Titre</label>
-            <input id="titre" type="text" name="titre">
-            <label id="labelCategorie" for="categorie">Catégorie</label>
-            <select id="categorie" name="categorie">
-                <option value="" disabled selected></option>
-                <option value="Objets">Objets</option>
-                <option value="Appartements">Appartements</option>
-                <option value="Hotels & restaurants">Hotels & restaurants</option>
-            </select>
-            <input type="submit" id="envoyerProjet" value="Valider">
-        </form>
-</div>`;
+            <div id="intModal">
+                <div class="stop-modal">
+                    <button class="fa-solid fa-arrow-left js-retour-arriere"></button>
+                    <button class="fa-solid fa-xmark js-close-ajout-modal"></button>
+                </div>
+                <h3>Ajout photo</h2>
+                <form id="formAjout">
+                    <div id="fondAjout">
+                        <span id="logoAjout" class="fa-regular fa-image"></span>
+                        <label for="photoProjet" class="styleAjoutPhoto">+ Ajouter Photo</label>
+                        <input type="file" id="photoProjet" class="hide" name="photoProjet">
+                        <p id="format">jpg, png: 4mo max</p>
+                    </div>
+                    <label id="labelTitre" for="titre">Titre</label>
+                    <input id="titre" type="text" name="titre">
+                    <label id="labelCategorie" for="categorie">Catégorie</label>
+                    <select id="categorie" name="categorie">
+                        <option value="" disabled selected></option>
+                        <option value="Objets">Objets</option>
+                        <option value="Appartements">Appartements</option>
+                        <option value="Hotels & restaurants">Hotels & restaurants</option>
+                    </select>
+                    <input type="submit" id="envoyerProjet" value="Valider">
+                </form>
+            </div>`;
 
-        // Ajout de l'overlay et de la modale au DOM
-        if (!document.body.contains(overlay)) {
-            document.body.appendChild(overlay);
-        }
-        document.body.appendChild(modaleAjoutPhoto);
-
-        // Affichage de la modale et de l'overlay
         overlay.style.display = "block";
         modaleAjoutPhoto.style.display = "block";
-        if (modal) {
-            modal.style.display = "none";
-        }
-
-        console.log("Modale d'ajout de photo ouverte");
-
-        // Ajout des écouteurs d'événements pour fermer la modale
-        overlay.addEventListener("click", closeAjoutPhotoModal);
-        modaleAjoutPhoto.querySelector(".js-close-ajout-modal").addEventListener("click", closeAjoutPhotoModal);
-
-        // Empêcher la propagation de l'événement de clic dans la modale
-        modaleAjoutPhoto.addEventListener("click", stopPropagation);
-
-        // Ajout des écouteurs d'événements pour fermer la modale actuelle et ouvrir la précédente
-        modaleAjoutPhoto.querySelector(".js-retour-arriere").addEventListener("click", function (e) {
-            e.preventDefault();
-            modaleAjoutPhoto.style.display = "none";
-            openModal(e);
-        });
 
         // Affiche l'image lorsqu'elle est sélectionnée
         document.getElementById('photoProjet').addEventListener('change', function (event) {
@@ -232,10 +215,19 @@ document.addEventListener('DOMContentLoaded', (event) => {
             reader.readAsDataURL(file);
         });
 
-        setupFormListeners(); // Ajouter les écouteurs d'événements pour le formulaire après l'ouverture de la modale
+        // Ajout des écouteurs d'événements pour fermer la modale
+        overlay.addEventListener("click", closeAjoutPhotoModal);
+        document.querySelector(".js-close-ajout-modal").addEventListener("click", closeAjoutPhotoModal);
+        document.querySelector(".js-retour-arriere").addEventListener("click", function (e) {
+            e.preventDefault();
+            closeAjoutPhotoModal(e);
+            openModal(e);
+        });
+
+        setupFormListeners();
     };
 
-    // Fonction pour ajouter les écouteurs d'événements au formulaire
+    // Fonction pour vérifier les inputs et activer le bouton de validation
     function setupFormListeners() {
         const titreInput = document.getElementById("titre");
         const categorieSelect = document.getElementById("categorie");
@@ -251,6 +243,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
                 boutonValider.disabled = true;
             }
         }
+
         titreInput.addEventListener('input', checkInputs);
         categorieSelect.addEventListener('change', checkInputs);
         photoInput.addEventListener('change', checkInputs);
@@ -263,12 +256,18 @@ document.addEventListener('DOMContentLoaded', (event) => {
 
     // Fonction pour envoyer le projet et le stocker
     async function validerProjet(event) {
+
         // Empêcher le comportement par défaut du formulaire
         event.preventDefault();
 
-        // Récupérer le formulaire et créer un nouvel objet FormData
-        const formAjout = document.getElementById("formAjout");
-        const nouveauProjet = new FormData(formAjout);
+        const titre = document.getElementById("titre").value;
+        const categorie = document.getElementById("categorie").value;
+        const photoInput = document.getElementById("photoProjet");
+        const photoFile = photoInput.files[0];
+        const nouveauProjet = new FormData();
+        nouveauProjet.append('titre', titre);
+        nouveauProjet.append('categorie', categorie);
+        nouveauProjet.append('photoProjet', photoFile);
         console.log(nouveauProjet);
 
         try {
@@ -305,21 +304,16 @@ document.addEventListener('DOMContentLoaded', (event) => {
     const closeAjoutPhotoModal = function (e) {
         e.preventDefault();
 
-        // Cacher l'overlay et la modale
         overlay.style.display = "none";
-        const modaleAjoutPhoto = document.querySelector(".modale-ajout-photo");
-        if (modaleAjoutPhoto) {
-            modaleAjoutPhoto.style.display = "none";
-            document.body.removeChild(modaleAjoutPhoto);
-        }
-
-        // Retirer les écouteurs d'événements
+        modaleAjoutPhoto.style.display = "none";
+        modaleAjoutPhoto.setAttribute("aria-hidden", "true");
+        modaleAjoutPhoto.removeAttribute("aria-modal");
         overlay.removeEventListener("click", closeAjoutPhotoModal);
-        if (modaleAjoutPhoto) {
-            modaleAjoutPhoto.removeEventListener("click", stopPropagation);
+        
+        // Fermer également la première modale si elle est ouverte
+        if (modal) {
+            closeModal(e);
         }
-
-        console.log("Modale d'ajout de photo fermée");
     };
 
     // Ajout de l'écouteur d'événement pour ouvrir la modale d'ajout de photo

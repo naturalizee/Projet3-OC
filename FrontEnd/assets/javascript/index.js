@@ -100,5 +100,3 @@ export function afficherMessage(message) {
     erreurMessage.style.marginBottom = "10px";
     portfolio.appendChild(erreurMessage)
 }
-
-// export default afficherTravaux();
