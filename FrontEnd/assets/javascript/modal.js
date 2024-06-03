@@ -231,7 +231,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
     function setupFormListeners() {
         const titreInput = document.getElementById("titre");
         const categorieSelect = document.getElementById("categorie");
-        const photoInput = document.getElementById("photoProjet");
+        const photoInput = document.querySelector("#photoProjet");
         const boutonValider = document.getElementById("envoyerProjet");
 
         function checkInputs() {
@@ -256,47 +256,51 @@ document.addEventListener('DOMContentLoaded', (event) => {
 
     // Fonction pour envoyer le projet et le stocker
     async function validerProjet(event) {
-
         // Empêcher le comportement par défaut du formulaire
         event.preventDefault();
-
+    
         const titre = document.getElementById("titre").value;
         const categorie = document.getElementById("categorie").value;
         const photoInput = document.getElementById("photoProjet");
-        const photoFile = photoInput.files[0];
-        const nouveauProjet = new FormData();
-        nouveauProjet.append('titre', titre);
-        nouveauProjet.append('categorie', categorie);
-        nouveauProjet.append('photoProjet', photoFile);
-        console.log(nouveauProjet);
-
-        try {
-            // Effectuer la requête POST avec fetch
-            const response = await fetch('http://localhost:5678/api/works', {
-                method: 'POST',
-                headers: {
-                    "Authorization": `Bearer ${token}`
-                },
-                body: nouveauProjet
-            });
-
-            if (response.ok) {
-                // Si la réponse est OK, afficher les travaux mis à jour
-                const projetAjoute = await response.json();
-                afficherTravaux();
-                afficherTravauxModale();
-                closeAjoutPhotoModal();
-            } else {
-                // Sinon, afficher le contenu de la réponse en cas d'erreur
-                console.error("Erreur lors de l'ajout du projet:", response.status, response.statusText);
-                const errorResponse = await response.json();
-                console.error("Contenu de la réponse:", errorResponse);
-                afficherMessage("Erreur lors de l'ajout du projet.");
+        // Vérifier si photoInput existe
+        if (photoInput) {
+            const photoFile = photoInput.files[0];
+            const nouveauProjet = new FormData();
+            nouveauProjet.append('titre', titre);
+            nouveauProjet.append('categorie', categorie);
+            nouveauProjet.append('photoProjet', photoFile);
+            console.log(nouveauProjet);
+    
+            try {
+                // Effectuer la requête POST avec fetch
+                const response = await fetch('http://localhost:5678/api/works', {
+                    method: 'POST',
+                    headers: {
+                        "Authorization": `Bearer ${token}`
+                    },
+                    body: nouveauProjet
+                });
+    
+                if (response.ok) {
+                    // Si la réponse est OK, afficher les travaux mis à jour
+                    const projetAjoute = await response.json();
+                    afficherTravaux();
+                    afficherTravauxModale();
+                    closeAjoutPhotoModal();
+                } else {
+                    // Sinon, afficher le contenu de la réponse en cas d'erreur
+                    console.error("Erreur lors de l'ajout du projet:", response.status, response.statusText);
+                    const errorResponse = await response.json();
+                    console.error("Contenu de la réponse:", errorResponse);
+                    afficherMessage("Erreur lors de l'ajout du projet.");
+                }
+            } catch (error) {
+                // Attraper les erreurs de la requête
+                console.error("Erreur lors de la requête POST:", error);
+                afficherMessage("Une erreur est survenue. Veuillez réessayer.");
             }
-        } catch (error) {
-            // Attraper les erreurs de la requête
-            console.error("Erreur lors de la requête POST:", error);
-            afficherMessage("Une erreur est survenue. Veuillez réessayer.");
+        } else {
+            console.error("L'élément avec l'ID 'photoProjet' n'existe pas.");
         }
     }
 
