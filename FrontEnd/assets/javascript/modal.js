@@ -168,14 +168,14 @@ document.addEventListener('DOMContentLoaded', () => {
             <form id="formAjout" enctype="multipart/form-data">
                 <div id="fondAjout">
                     <span id="logoAjout" class="fa-regular fa-image"></span>
-                    <label for="photoProjet" class="styleAjoutPhoto">+ Ajouter Photo</label>
-                    <input type="file" id="photoProjet" class="hide" name="photoProjet">
+                    <label for="image" class="styleAjoutPhoto">+ Ajouter Photo</label>
+                    <input id="image" type="file" class="hide" name="image" accept="image/png, image/jpeg">
                     <p id="format">jpg, png: 4mo max</p>
                 </div>
                 <label id="labelTitre" for="titre">Titre</label>
-                <input id="titre" type="text" name="titre">
+                <input id="titre" type="text" name="title">
                 <label id="labelCategorie" for="categorie">Catégorie</label>
-                <select id="categorie" name="categorie">
+                <select id="categorie" name="category">
                     <option value="" disabled selected></option>
                     <option value="Objets">Objets</option>
                     <option value="Appartements">Appartements</option>
@@ -192,7 +192,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     //Fonction de vérification de remplissage des champs et activer bouton de validation
     function setupFormListeners() {
-        const photoInput = document.getElementById("photoProjet");
+        const photoInput = document.getElementById("image");
         const titreInput = document.getElementById("titre");
         const categorieSelect = document.getElementById("categorie");
         const boutonValider = document.getElementById("envoyerProjet");
@@ -279,10 +279,16 @@ document.addEventListener('DOMContentLoaded', () => {
 async function validerProjet(event) {
     event.preventDefault();  // Empêcher le comportement par défaut du formulaire
 
-    const formAjout = document.getElementById("formAjout");
-    const nouveauProjet = new FormData(formAjout);
+    const title = document.getElementById("titre").value;
+    const categoryId = document.getElementById("categorie").value;
+    const image = document.getElementById("image").files[0];
 
     try {
+        const nouveauProjet = new FormData();
+        nouveauProjet.append("title", title);
+        nouveauProjet.append("image", image);
+        nouveauProjet.append("category", categoryId);
+
         const token = localStorage.getItem("token");
         const response = await fetch('http://localhost:5678/api/works', {
             method: 'POST',
@@ -291,7 +297,7 @@ async function validerProjet(event) {
             },
             body: nouveauProjet
         });
-
+        console.log("contenu:" + nouveauProjet)
         if (response.ok) {
             const projetAjoute = await response.json();
             afficherTravaux();
@@ -307,4 +313,4 @@ async function validerProjet(event) {
         console.error("Erreur lors de la requête POST:", error);
         afficherMessage("Une erreur est survenue. Veuillez réessayer.");
     }
-}
+};
