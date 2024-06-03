@@ -167,8 +167,10 @@ document.addEventListener('DOMContentLoaded', () => {
             <h3>Ajout photo</h3>
             <form id="formAjout" enctype="multipart/form-data">
                 <div id="fondAjout">
+                <div id="previewAjout">
                     <span id="logoAjout" class="fa-regular fa-image"></span>
                     <label for="image" class="styleAjoutPhoto">+ Ajouter Photo</label>
+                </div>
                     <input id="image" type="file" class="hide" name="image" accept="image/png, image/jpeg">
                     <p id="format">jpg, png: 4mo max</p>
                 </div>
@@ -176,10 +178,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 <input id="titre" type="text" name="title">
                 <label id="labelCategorie" for="categorie">Catégorie</label>
                 <select id="categorie" name="category">
-                    <option value="" disabled selected></option>
-                    <option value="Objets">Objets</option>
-                    <option value="Appartements">Appartements</option>
-                    <option value="Hotels & restaurants">Hotels & restaurants</option>
+                <option value="" disabled selected></option>
+                <option value="1">Objets</option>
+                <option value="2">Appartements</option>
+                <option value="3">Hotels & restaurants</option>
                 </select>
                 <input type="submit" id="envoyerProjet" value="Valider">
             </form>
@@ -214,13 +216,13 @@ document.addEventListener('DOMContentLoaded', () => {
             const file = event.target.files[0];
             const reader = new FileReader();
             reader.onload = function (e) {
-                const fondAjout = document.getElementById('fondAjout');
-                fondAjout.innerHTML = '';
+                const previewAjout = document.getElementById('previewAjout');
+                previewAjout.innerHTML = '';
                 const image = document.createElement('img');
                 image.src = e.target.result;
                 image.style.width = '100%';
                 image.style.borderRadius = '10px';
-                fondAjout.appendChild(image);
+                previewAjout.appendChild(image);
             };
             reader.readAsDataURL(file);
         });
@@ -273,21 +275,33 @@ document.addEventListener('DOMContentLoaded', () => {
 
     setupModalListeners();
 
-});
+
 
 // Fonction pour envoyer le projet et le stocker
 async function validerProjet(event) {
     event.preventDefault();  // Empêcher le comportement par défaut du formulaire
 
+    const formAjout = document.getElementById("formAjout");
+    if (!formAjout) {
+        console.error("Le formulaire d'ajout n'a pas été trouvé.");
+        return;
+    }
+
     const title = document.getElementById("titre").value;
     const categoryId = document.getElementById("categorie").value;
     const image = document.getElementById("image").files[0];
+
+    if (!title || !categoryId || !image) {
+        console.error("Tous les champs du formulaire ne sont pas remplis.");
+        return;
+    }
 
     try {
         const nouveauProjet = new FormData();
         nouveauProjet.append("title", title);
         nouveauProjet.append("image", image);
         nouveauProjet.append("category", categoryId);
+        
 
         const token = localStorage.getItem("token");
         const response = await fetch('http://localhost:5678/api/works', {
@@ -297,12 +311,11 @@ async function validerProjet(event) {
             },
             body: nouveauProjet
         });
-        console.log("contenu:" + nouveauProjet)
         if (response.ok) {
             const projetAjoute = await response.json();
             afficherTravaux();
             afficherTravauxModale();
-            closeAjoutPhotoModal();
+            closeAjoutPhotoModal(event);
         } else {
             console.error("Erreur lors de l'ajout du projet:", response.status, response.statusText);
             const errorResponse = await response.json();
@@ -314,3 +327,4 @@ async function validerProjet(event) {
         afficherMessage("Une erreur est survenue. Veuillez réessayer.");
     }
 };
+});
