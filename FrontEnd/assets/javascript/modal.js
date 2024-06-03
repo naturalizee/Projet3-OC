@@ -202,7 +202,6 @@ document.addEventListener('DOMContentLoaded', () => {
             } else {
                 boutonValider.style.backgroundColor = 'gray';
                 boutonValider.disabled = true;
-                console.log("Tous les champs ne sont pas remplis")
                 return;
             }
         }
@@ -237,12 +236,16 @@ document.addEventListener('DOMContentLoaded', () => {
                 closeAjoutPhotoModal(event);
             }
         });
-         // Ajout de l'écouteur d'événement pour fermer la modale avec la touche echap
-    window.addEventListener("keydown", function (e) {
-        if (e.key === "Escape" || e.key === "Esc") {
-            closeAjoutPhotoModal(e);
-        }
-    });
+
+        // Ajout de l'écouteur d'événement pour fermer la modale avec la touche echap
+        window.addEventListener("keydown", function (e) {
+            if (e.key === "Escape" || e.key === "Esc") {
+                closeAjoutPhotoModal(e);
+            }
+        });
+
+        // Ajout de l'écouteur d'événement pour le bouton Valider
+        boutonValider.addEventListener("click", validerProjet);
     }
 
     const closeAjoutPhotoModal = function (e) {
@@ -267,4 +270,39 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     setupModalListeners();
+
 });
+
+// Fonction pour envoyer le projet et le stocker
+async function validerProjet(event) {
+    event.preventDefault();  // Empêcher le comportement par défaut du formulaire
+
+    const formAjout = document.getElementById("formAjout");
+    const nouveauProjet = new FormData(formAjout);
+
+    try {
+        const token = localStorage.getItem("token");
+        const response = await fetch('http://localhost:5678/api/works', {
+            method: 'POST',
+            headers: {
+                "Authorization": `Bearer ${token}`
+            },
+            body: nouveauProjet
+        });
+        console.log(nouveauProjet)
+        if (response.ok) {
+            const projetAjoute = await response.json();
+            afficherTravaux();
+            afficherTravauxModale();
+            closeAjoutPhotoModal();
+        } else {
+            console.error("Erreur lors de l'ajout du projet:", response.status, response.statusText);
+            const errorResponse = await response.json();
+            console.error("Contenu de la réponse:", errorResponse);
+            afficherMessage("Erreur lors de l'ajout du projet.");
+        }
+    } catch (error) {
+        console.error("Erreur lors de la requête POST:", error);
+        afficherMessage("Une erreur est survenue. Veuillez réessayer.");
+    }
+}
