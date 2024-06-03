@@ -168,13 +168,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 <div id="fondAjout">
                     <span id="logoAjout" class="fa-regular fa-image"></span>
                     <label for="photoProjet" class="styleAjoutPhoto">+ Ajouter Photo</label>
-                    <input type="file" id="photoProjet" class="hide" name="photoProjet">
+                    <input type="file" id="photoProjet" class="hide" name="image">
                     <p id="format">jpg, png: 4mo max</p>
                 </div>
                 <label id="labelTitre" for="titre">Titre</label>
-                <input id="titre" type="text" name="titre">
+                <input id="titre" type="text" name="title">
                 <label id="labelCategorie" for="categorie">Catégorie</label>
-                <select id="categorie" name="categorie">
+                <select id="categorie" name="category">
                     <option value="" disabled selected></option>
                     <option value="Objets">Objets</option>
                     <option value="Appartements">Appartements</option>
@@ -277,10 +277,16 @@ document.addEventListener('DOMContentLoaded', () => {
 async function validerProjet(event) {
     event.preventDefault();  // Empêcher le comportement par défaut du formulaire
 
-    const formAjout = document.getElementById("formAjout");
-    const nouveauProjet = new FormData(formAjout);
+    const title = document.querySelector("#titre").value;
+    const categoryId = document.querySelector("#categorie").value;
+    const image = document.querySelector("#photoProjet").files[0];
 
     try {
+        const nouveauProjet = new FormData();
+        nouveauProjet.append("title", title);
+        nouveauProjet.append("category", categoryId);
+        nouveauProjet.append("image", image);
+
         const token = localStorage.getItem("token");
         const response = await fetch('http://localhost:5678/api/works', {
             method: 'POST',
@@ -289,7 +295,7 @@ async function validerProjet(event) {
             },
             body: nouveauProjet
         });
-        console.log(nouveauProjet)
+        console.log("contenu:" + nouveauProjet)
         if (response.ok) {
             const projetAjoute = await response.json();
             afficherTravaux();
@@ -305,4 +311,4 @@ async function validerProjet(event) {
         console.error("Erreur lors de la requête POST:", error);
         afficherMessage("Une erreur est survenue. Veuillez réessayer.");
     }
-}
+};
