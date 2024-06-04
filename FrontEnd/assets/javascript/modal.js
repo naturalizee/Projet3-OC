@@ -116,6 +116,17 @@ document.addEventListener('DOMContentLoaded', () => {
                 ajoutPhotoContainer.prepend(galeriePhotoHeader);
             }
 
+            if (!document.getElementById("ajoutPhoto")) {
+                const buttonElement = document.createElement('button');
+                buttonElement.textContent = 'Ajouter une photo';
+                buttonElement.id = 'ajoutPhoto'; // Définissez l'ID selon vos besoins
+                const modalElement = document.querySelector('.Modale');
+                modalElement.appendChild(buttonElement);
+
+                // Ajout de l'écouteur d'événement pour ouvrir la modale d'ajout de photo
+                buttonElement.addEventListener("click", openAjoutPhotoModal);
+            }
+
             // Crée un conteneur pour les images
             const imagesContainer = document.createElement('div');
             imagesContainer.className = 'imagesContainer';
@@ -187,9 +198,6 @@ document.addEventListener('DOMContentLoaded', () => {
     modaleAjoutPhoto.className = "modale-ajout-photo";
     modaleAjoutPhoto.style.display = "none";
     document.body.appendChild(modaleAjoutPhoto);
-
-    // Fonction pour ouvrir la modale d'ajout de photo
-    document.getElementById("ajoutPhoto").addEventListener("click", openAjoutPhotoModal);
 
     // Création de la modale
     function openAjoutPhotoModal() {
@@ -300,17 +308,7 @@ document.addEventListener('DOMContentLoaded', () => {
         openModal(e);
     };
 
-    // Ajout de l'écouteur d'événement pour ouvrir la modale d'ajout de photo
-    const ajoutPhotoButton = document.getElementById("ajoutPhoto");
-    if (ajoutPhotoButton) {
-        ajoutPhotoButton.addEventListener("click", openAjoutPhotoModal);
-    } else {
-        console.error("L'élément avec l'ID 'ajoutPhoto' n'existe pas.");
-    }
-
     setupModalListeners();
-
-
 
     // Fonction pour envoyer le projet et le stocker
     async function validerProjet(event) {
