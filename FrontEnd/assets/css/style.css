@@ -232,9 +232,11 @@ li:hover {
 	grid-row-gap: 20px;
 }
 
-.gallery img {
+.gallery img,
+.figure img {
 	width: 100%;
-
+	height: 100%;
+	object-fit: cover;
 }
 
 #contact {
@@ -296,6 +298,14 @@ a:link:not(.mdpOublie),
 a:visited:not(.mdpOublie) {
 	color: inherit;
 	text-decoration: none;
+}
+
+figure {
+	margin-bottom: 25px;
+}
+
+figcaption {
+	margin-top: 5px;
 }
 
 /* Header */

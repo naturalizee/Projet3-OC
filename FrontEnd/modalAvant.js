@@ -35,10 +35,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Fonction pour ouvrir la modale
     const target = document.querySelector(".js-open-modal");
-    if (target) {
-        target.style.display = "none";
-    }
-
+    target.style.display = "none";
     const openModal = function (e) {
         e.preventDefault();
 
@@ -53,15 +50,8 @@ document.addEventListener('DOMContentLoaded', () => {
         target.removeAttribute("aria-hidden");
         target.setAttribute("aria-modal", "true");
         modal = target;
-
-        // Vérifie que modal et les éléments existent avant d'ajouter des écouteurs d'événements
-        if (modal) {
-            overlay.addEventListener("click", closeModal);
-            const closeButton = modal.querySelector(".js-close-modal");
-            if (closeButton) {
-                closeButton.addEventListener("click", closeModal);
-            }
-        }
+        overlay.addEventListener("click", closeModal);
+        modal.querySelector(".js-close-modal").addEventListener("click", closeModal);
     };
 
     // Fonction pour fermer la modale
@@ -96,30 +86,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 console.error("L'élément avec la classe 'ajoutPhotoContainer' n'existe pas.");
                 return;
             }
-
-            // Vide le conteneur avant d'ajouter les nouveaux éléments
             ajoutPhotoContainer.innerHTML = '';
-
-            // Vérifie si les éléments existent déjà avant de les créer
-            if (!document.querySelector('.js-close-modal')) {
-                const closeModalLink = document.createElement('a');
-                closeModalLink.href = '#';
-                closeModalLink.className = 'js-close-modal fa-solid fa-x';
-                ajoutPhotoContainer.prepend(closeModalLink);
-                closeModalLink.addEventListener("click", closeModal); // Ajout de l'écouteur d'événement ici
-            }
-
-            if (!document.querySelector('.galeriePhoto')) {
-                const galeriePhotoHeader = document.createElement('h3');
-                galeriePhotoHeader.className = 'galeriePhoto';
-                galeriePhotoHeader.textContent = 'Galerie photo';
-                ajoutPhotoContainer.prepend(galeriePhotoHeader);
-            }
-
-            // Crée un conteneur pour les images
-            const imagesContainer = document.createElement('div');
-            imagesContainer.className = 'imagesContainer';
-
             travaux.forEach(travail => {
                 const imageContainer = document.createElement('div');
                 imageContainer.classList.add('imageContainer');
@@ -144,11 +111,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 imgContainer.appendChild(img);
                 imgContainer.appendChild(poubelleIcon);
                 imageContainer.appendChild(imgContainer);
-                imagesContainer.appendChild(imageContainer);
+                ajoutPhotoContainer.appendChild(imageContainer);
             });
-
-            // Ajoute le conteneur des images à la suite de l'en-tête
-            ajoutPhotoContainer.appendChild(imagesContainer);
 
         } catch (error) {
             console.error("Une erreur est survenue lors de l'affichage des travaux :", error);
@@ -166,8 +130,7 @@ document.addEventListener('DOMContentLoaded', () => {
             });
             if (response.ok) {
                 console.log(`Travail avec ID ${id} supprimé.`);
-                await afficherTravauxModale(); // Assurez-vous que les écouteurs d'événements sont réinitialisés
-                setupModalListeners(); // Réassocie les écouteurs d'événements
+                afficherTravauxModale();
             } else {
                 console.error(`Erreur lors de la suppression du travail avec ID ${id}.`);
             }
@@ -178,6 +141,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Appel de la fonction pour afficher les travaux
     afficherTravauxModale();
+
 
     /* ===================================================== */
     ///        MODALE 2 - AJOUT PHOTO, TITRE, CATEGORIE
@@ -312,56 +276,56 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 
-    // Fonction pour envoyer le projet et le stocker
-    async function validerProjet(event) {
-        event.preventDefault();  // Empêcher le comportement par défaut du formulaire
+// Fonction pour envoyer le projet et le stocker
+async function validerProjet(event) {
+    event.preventDefault();  // Empêcher le comportement par défaut du formulaire
 
-        const formAjout = document.getElementById("formAjout");
-        if (!formAjout) {
-            console.error("Le formulaire d'ajout n'a pas été trouvé.");
-            return;
+    const formAjout = document.getElementById("formAjout");
+    if (!formAjout) {
+        console.error("Le formulaire d'ajout n'a pas été trouvé.");
+        return;
+    }
+
+    const title = document.getElementById("titre").value;
+    const categoryId = document.getElementById("categorie").value;
+    const image = document.getElementById("image").files[0];
+
+    if (!title || !categoryId || !image) {
+        afficherMessage("Tous les champs du formulaire ne sont pas remplis.");
+        return;
+    }
+
+    try {
+        const nouveauProjet = new FormData();
+        nouveauProjet.append("title", title);
+        nouveauProjet.append("image", image);
+        nouveauProjet.append("category", categoryId);
+        
+
+        const token = localStorage.getItem("token");
+        const response = await fetch('http://localhost:5678/api/works', {
+            method: 'POST',
+            headers: {
+                "Authorization": `Bearer ${token}`
+            },
+            body: nouveauProjet
+        });
+        if (response.ok) {
+            const projetAjoute = await response.json();
+            afficherTravaux();
+            afficherTravauxModale();
+            closeAjoutPhotoModal(event);
+        } else {
+            console.error("Erreur lors de l'ajout du projet:", response.status, response.statusText);
+            const errorResponse = await response.json();
+            console.error("Contenu de la réponse:", errorResponse);
+            afficherMessage("Erreur lors de l'ajout du projet.");
         }
-
-        const title = document.getElementById("titre").value;
-        const categoryId = document.getElementById("categorie").value;
-        const image = document.getElementById("image").files[0];
-
-        if (!title || !categoryId || !image) {
-            afficherMessage("Tous les champs du formulaire ne sont pas remplis.");
-            return;
-        }
-
-        try {
-            const nouveauProjet = new FormData();
-            nouveauProjet.append("title", title);
-            nouveauProjet.append("image", image);
-            nouveauProjet.append("category", categoryId);
-
-
-            const token = localStorage.getItem("token");
-            const response = await fetch('http://localhost:5678/api/works', {
-                method: 'POST',
-                headers: {
-                    "Authorization": `Bearer ${token}`
-                },
-                body: nouveauProjet
-            });
-            if (response.ok) {
-                const projetAjoute = await response.json();
-                afficherTravaux();
-                afficherTravauxModale();
-                closeAjoutPhotoModal(event);
-            } else {
-                console.error("Erreur lors de l'ajout du projet:", response.status, response.statusText);
-                const errorResponse = await response.json();
-                console.error("Contenu de la réponse:", errorResponse);
-                afficherMessage("Erreur lors de l'ajout du projet.");
-            }
-        } catch (error) {
-            console.error("Erreur lors de la requête POST:", error);
-            afficherMessage("Une erreur est survenue. Veuillez réessayer.");
-        }
-    };
+    } catch (error) {
+        console.error("Erreur lors de la requête POST:", error);
+        afficherMessage("Une erreur est survenue. Veuillez réessayer.");
+    }
+};
 });
 
 

@@ -23,7 +23,6 @@ async function login(event) {
             localStorage.setItem("token", data.token);
             window.location.href = "../../index.html";
             console.log("Connexion réussie");
-            console.log("Token trouvé :", localStorage.getItem("token"));
         } else {
             afficherMessage("Erreur dans l’identifiant ou le mot de passe")
         }

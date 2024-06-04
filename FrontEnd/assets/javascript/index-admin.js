@@ -48,7 +48,6 @@ const filtresCategories = document.getElementById("filtres-categories");
 
 async function apparitionEdition() {
     const verifConnection = localStorage.getItem("token");
-    console.log("Token vérifié:", verifConnection);
 
     if (verifConnection) {
         openModalHTML.style.display = "block";
@@ -57,9 +56,6 @@ async function apparitionEdition() {
         filtresCategories.style.display = "none";
         login.style.display = "none";
         LogOut.style.display = "block";
-        console.log("ok");
-    } else {
-        console.log("Erreur !");
     }
 }
 
