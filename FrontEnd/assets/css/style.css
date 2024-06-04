@@ -1,3 +1,7 @@
+/* ===================================================== */
+/*     GENERAL
+/* ===================================================== */
+
 /* http://meyerweb.com/eric/tools/css/reset/
    v2.0 | 20110126
    License: none (public domain)
@@ -134,7 +138,6 @@ table {
 	border-spacing: 0;
 }
 
-/** end reset css**/
 body {
 	max-width: 1140px;
 	margin: auto;
@@ -142,14 +145,28 @@ body {
 	font-size: 14px;
 }
 
+a:link:not(.mdpOublie),
+a:visited:not(.mdpOublie) {
+	color: inherit;
+	text-decoration: none;
+}
+
+figure {
+	margin-bottom: 25px;
+}
+
+figcaption {
+	margin-top: 5px;
+}
+
+/* ===================================================== */
+/*     HEADER
+/* ===================================================== */
+
 header {
 	display: flex;
 	justify-content: space-between;
-	margin: 50px 0
-}
-
-section {
-	margin: 50px 0
+	margin: 50px 0;
 }
 
 h1 {
@@ -158,14 +175,13 @@ h1 {
 	font-family: 'Syne';
 	font-size: 22px;
 	font-weight: 800;
-	color: #B1663C
+	color: #B1663C;
 }
 
-h1>span {
+h1 > span {
 	font-family: 'Work Sans';
 	font-size: 10px;
 	letter-spacing: 0.1em;
-	;
 }
 
 h2 {
@@ -175,12 +191,10 @@ h2 {
 	color: #1D6154
 }
 
-
 nav ul {
 	display: flex;
 	align-items: center;
 	list-style-type: none;
-
 }
 
 nav li {
@@ -188,9 +202,25 @@ nav li {
 	font-size: 1.2em;
 }
 
+header nav li a.active {
+    font-weight: bold;
+}
+
 li:hover {
 	color: #B1663C;
 }
+
+.projets {
+	font-weight: normal;
+}
+
+li.LogOut {
+	display: block;
+}
+
+/* ===================================================== */
+/*     INTRODUCTION
+/* ===================================================== */
 
 #introduction {
 	display: flex;
@@ -198,7 +228,7 @@ li:hover {
 }
 
 #introduction figure {
-	flex: 1
+	flex: 1;
 }
 
 #introduction img {
@@ -208,7 +238,7 @@ li:hover {
 }
 
 #introduction article {
-	flex: 1
+	flex: 1;
 }
 
 #introduction h2 {
@@ -218,6 +248,10 @@ li:hover {
 #introduction p {
 	margin-bottom: 0.5em;
 }
+
+/* ===================================================== */
+/*     PORTFOLIO
+/* ===================================================== */
 
 #portfolio h2 {
 	text-align: center;
@@ -239,14 +273,44 @@ li:hover {
 	object-fit: cover;
 }
 
+/* ===================================================== */
+/*     FILTRES
+/* ===================================================== */
+
+#filtres-categories {
+	display: flex;
+	justify-content: center;
+	margin-bottom: 50px;
+}
+
+#filtres-categories button {
+	margin: 0 5px;
+	padding: 8px;
+	background-color: white;
+	color: #1D6154;
+	border: #1D6154 solid 1px;
+	border-radius: 60px;
+	cursor: pointer;
+	font-size: 16px;
+	font-family: 'Syne';
+}
+
+#filtres-categories button:focus {
+	background-color: #1D6154;
+	color: white;
+}
+
+/* ===================================================== */
+/*    CONTACT
+/* ===================================================== */
+
 #contact {
 	width: 50%;
 	margin: auto;
 }
 
-#contact>* {
+#contact > * {
 	text-align: center;
-
 }
 
 #contact h2 {
@@ -288,59 +352,17 @@ input[type="submit"],
 	border-radius: 60px;
 }
 
+/* ===================================================== */
+/*     FOOTER
+/* ===================================================== */
+
 footer nav ul {
 	display: flex;
 	justify-content: flex-end;
-	margin: 2em
+	margin: 2em;
 }
 
-a:link:not(.mdpOublie),
-a:visited:not(.mdpOublie) {
-	color: inherit;
-	text-decoration: none;
+footer {
+    height: 60px;
+    margin-top: 100px;
 }
-
-figure {
-	margin-bottom: 25px;
-}
-
-figcaption {
-	margin-top: 5px;
-}
-
-/* Header */
-
-.projets {
-    font-weight: bold;
-}
-
-li.LogOut {
-	display: block;
-}
-
-/* Boutons de filtres de catégories */
-
-#filtres-categories {
-	display: flex;
-	justify-content: center;
-	margin-bottom: 50px;
-}
-
-#filtres-categories button {
-	margin: 0 5px;
-	padding: 8px;
-	background-color: white;
-	color: #1D6154;
-	border: #1D6154 solid 1px;
-	border-radius: 60px;
-	cursor: pointer;
-	font-size: 16px;
-	font-family: 'Syne';
-}
-
-#filtres-categories button:focus {
-	background-color: #1D6154;
-	color: white;
-}
-
-

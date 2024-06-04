@@ -3,14 +3,19 @@ import { afficherTravaux } from "./index.js";
 document.addEventListener('DOMContentLoaded', () => {
     const token = localStorage.getItem("token");
 
-    /* ===================================================== */
-    ///     MODALE 1 - GALERIE PHOTO, SUPPRESSION PROJETS
-    /* ===================================================== */
+    // =====================================================
+    //     MODALE 1 - GALERIE PHOTO ET SUPPRESSION DE PROJETS
+    // =====================================================
+
+    // =====================================================
+    //     Général
+    // =====================================================
 
     // Création de l'overlay pour la modale
     const overlay = document.createElement("div");
     overlay.className = "modal-overlay";
     document.body.appendChild(overlay);
+
     let modal = null;
     let formAjout;  // Déclaration du formulaire en dehors des fonctions pour le rendre accessible
 
@@ -19,12 +24,14 @@ document.addEventListener('DOMContentLoaded', () => {
         document.querySelectorAll(".js-open-modal-trigger").forEach(button => {
             button.addEventListener("click", openModal);
         });
+
         // Fermer la modale en cliquant en dehors de la modale
         overlay.addEventListener("click", function (event) {
             if (event.target === overlay) {
                 closeModal();
             }
         });
+
         // Fermer la modale avec la touche échapp
         window.addEventListener("keydown", function (e) {
             if (e.key === "Escape" || e.key === "Esc") {
@@ -39,6 +46,10 @@ document.addEventListener('DOMContentLoaded', () => {
         target.style.display = "none";
     }
 
+    /**
+     * Fonction pour ouvrir la modale
+     * @param {Event} e - L'événement de clic
+     */
     const openModal = function (e) {
         e.preventDefault();
 
@@ -64,7 +75,9 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
 
-    // Fonction pour fermer la modale
+    /**
+     * Fonction pour fermer la modale
+     */
     function closeModal() {
         if (!modal) return;
         overlay.style.display = "none";
@@ -76,7 +89,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
     setupModalListeners();
 
-    // Fonction pour récupérer les travaux depuis l'API
+    /**
+     * Fonction pour récupérer les travaux depuis l'API
+     * @returns {Promise<Array>} Les travaux récupérés depuis l'API
+     */
     async function fetchTravaux() {
         const reponseTravaux = await fetch("http://localhost:5678/api/works", {
             headers: {
@@ -87,7 +103,13 @@ document.addEventListener('DOMContentLoaded', () => {
         return travaux;
     }
 
-    // Fonction pour afficher les travaux dans la modale
+    // =====================================================
+    //     Affichage des travaux
+    // =====================================================
+
+    /**
+     * Fonction pour afficher les travaux dans la modale
+     */
     async function afficherTravauxModale() {
         try {
             const travaux = await fetchTravaux();
@@ -166,7 +188,14 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // Fonction pour supprimer un travail
+    // =====================================================
+    //     Suppression des travaux
+    // =====================================================
+
+    /**
+     * Fonction pour supprimer un travail
+     * @param {number} id - L'ID du travail à supprimer
+     */
     async function supprimerTravail(id) {
         try {
             const response = await fetch(`http://localhost:5678/api/works/${id}`, {
@@ -190,9 +219,13 @@ document.addEventListener('DOMContentLoaded', () => {
     // Appel de la fonction pour afficher les travaux
     afficherTravauxModale();
 
-    /* ===================================================== */
-    ///        MODALE 2 - AJOUT PHOTO, TITRE, CATEGORIE
-    /* ===================================================== */
+    // =====================================================
+    //     MODALE 2 - AJOUT DE PROJETS
+    // =====================================================
+
+    // =====================================================
+    //     Général
+    // =====================================================
 
     const modaleAjoutPhoto = document.createElement("div");
     modaleAjoutPhoto.className = "modale-ajout-photo";
@@ -236,7 +269,13 @@ document.addEventListener('DOMContentLoaded', () => {
         setupFormListeners();
     }
 
-    //Fonction de vérification de remplissage des champs et activer bouton de validation
+    // =====================================================
+    //     Validation et prévisualisation
+    // =====================================================
+
+    /**
+     * Fonction de vérification de remplissage des champs et activer bouton de validation
+     */
     function setupFormListeners() {
         const photoInput = document.getElementById("image");
         const titreInput = document.getElementById("titre");
@@ -296,12 +335,20 @@ document.addEventListener('DOMContentLoaded', () => {
         boutonValider.addEventListener("click", validerProjet);
     }
 
+    /**
+     * Fonction pour fermer la modale d'ajout de photo
+     * @param {Event} e - L'événement de clic
+     */
     const closeAjoutPhotoModal = function (e) {
         e.preventDefault();
         overlay.style.display = "none";
         modaleAjoutPhoto.style.display = "none";
     };
 
+    /**
+     * Fonction pour revenir en arrière dans la modale
+     * @param {Event} e - L'événement de clic
+     */
     const retourArriereModal = function (e) {
         e.preventDefault();
         closeAjoutPhotoModal(e);
@@ -310,7 +357,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
     setupModalListeners();
 
-    // Fonction pour envoyer le projet et le stocker
+    // =====================================================
+    //     Envoi des projets
+    // =====================================================
+
+    /**
+     * Fonction pour envoyer le projet et le stocker
+     * @param {Event} event - L'événement de soumission du formulaire
+     */
     async function validerProjet(event) {
         event.preventDefault();  // Empêcher le comportement par défaut du formulaire
 
@@ -334,7 +388,6 @@ document.addEventListener('DOMContentLoaded', () => {
             nouveauProjet.append("title", title);
             nouveauProjet.append("image", image);
             nouveauProjet.append("category", categoryId);
-
 
             const token = localStorage.getItem("token");
             const response = await fetch('http://localhost:5678/api/works', {
@@ -360,19 +413,23 @@ document.addEventListener('DOMContentLoaded', () => {
             afficherMessage("Une erreur est survenue. Veuillez réessayer.");
         }
     };
+
+    /**
+     * Fonction pour afficher un message d'erreur
+     * @param {string} message - Le message d'erreur à afficher
+     */
+    function afficherMessage(message) {
+        const boutonValider = document.getElementById("envoyerProjet")
+        const erreurPrecedente = document.querySelector(".message-erreur")
+        if (erreurPrecedente) {
+            erreurPrecedente.remove()
+        }
+        const erreurMessage = document.createElement("p");
+        erreurMessage.classList.add("message-erreur")
+        erreurMessage.textContent = message;
+        erreurMessage.style.color = "red";
+        erreurMessage.style.marginBottom = "10px";
+        boutonValider.parentNode.insertBefore(erreurMessage, boutonValider);
+    };
+
 });
-
-
-function afficherMessage(message) {
-    const boutonValider = document.getElementById("envoyerProjet")
-    const erreurPrecedente = document.querySelector(".message-erreur")
-    if (erreurPrecedente) {
-        erreurPrecedente.remove()
-    }
-    const erreurMessage = document.createElement("p");
-    erreurMessage.classList.add("message-erreur")
-    erreurMessage.textContent = message;
-    erreurMessage.style.color = "red";
-    erreurMessage.style.marginBottom = "10px";
-    boutonValider.parentNode.insertBefore(erreurMessage, boutonValider);
-};

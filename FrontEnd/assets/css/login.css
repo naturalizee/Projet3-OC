@@ -1,19 +1,35 @@
-/* Général */
+/* ===================================================== */
+/*     GENERAL
+/* ===================================================== */
 
 * {
     background-color: #FFFEF8;
 }
 
-/* Formulaire de login */
+/* ===================================================== */
+/*     HEADER
+/* ===================================================== */
 
-#formulaire_login h2 {
-    margin: 50px 0;
+.login {
+    font-weight: bold;
 }
+
+.projets {
+    font-weight: normal;
+}
+
+/* ===================================================== */
+/*     FORMULAIRE DE LOGIN
+/* ===================================================== */
 
 #formulaire_login {
     display: flex;
     flex-direction: column;
     align-items: center;
+}
+
+#formulaire_login h2 {
+    margin: 50px 0;
 }
 
 .formulaire {
@@ -41,7 +57,10 @@
     transform: scale(1.1);
 }
 
-/* Mot de passe */
+/* ===================================================== */
+/*     MOT DE PASSE
+/* ===================================================== */
+
 .password-container {
     display: flex;
     flex-direction: column;
@@ -52,17 +71,9 @@
     width: 90%;
 }
 
-/* Header */
-
-.login {
-    font-weight: bold;
-}
-
-.projets {
-    font-weight: normal;
-}
-
-/* footer */
+/* ===================================================== */
+/*     FOOTER
+/* ===================================================== */
 
 footer {
     height: 60px;

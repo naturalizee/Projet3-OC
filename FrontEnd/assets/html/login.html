@@ -10,7 +10,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Work+Sans&display=swap"
         rel="stylesheet">
-    <meta name="description" content="">
+    <meta name="description" content="Connectez-vous à votre compte pour accéder aux fonctionnalités réservées.">
     <script rel="preconnect" src="https://kit.fontawesome.com/25db7173f3.js" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="../css/style.css">
     <link rel="stylesheet" href="../css/login.css">
@@ -19,24 +19,30 @@
 
 <body>
     <header>
+        <!-- Lien vers la page d'accueil -->
         <a href="../../index.html">
             <h1>Sophie Bluel <span>Architecte d'intérieur</span></h1>
         </a>
         <nav>
             <ul>
+                <!-- Liens de navigation -->
                 <li class="projets"><a href="../../index.html">projets</a></li>
                 <li>contact</li>
-                <li class="login"><a href="#">login</a></li>
+                <li class="login"><a href="#" class="active">login</a></li>
                 <li class="instagram"><img src="../icons/instagram.png" alt="Instagram"></li>
             </ul>
         </nav>
     </header>
+
     <main>
         <section id="formulaire_login">
             <h2>Log In</h2>
             <form class="formulaire">
+                <!-- Champ pour l'adresse email -->
                 <label for="email">E-mail</label>
                 <input type="email" name="email" id="email">
+
+                <!-- Champ pour le mot de passe avec icône de visibilité -->
                 <div class="password-container">
                     <label for="password">Mot de passe</label>
                     <div class="input-container">
@@ -44,7 +50,11 @@
                         <i id="toggle-password" class="fa-solid fa-eye-slash"></i>
                     </div>
                 </div>
+
+                <!-- Bouton de soumission du formulaire -->
                 <input type="submit" name="seConnecter" id="seConnecter" value="Se connecter">
+
+                <!-- Lien pour mot de passe oublié -->
                 <a href="#" class="mdpOublie">Mot de passe oublié</a>
             </form>
         </section>
