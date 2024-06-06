@@ -15,9 +15,7 @@ async function btnLogout() {
     boutonLogout.addEventListener("click", async () => {
         try {
             if (localStorage.getItem("token")) {
-                console.log("Token trouvé :", localStorage.getItem("token"));
                 localStorage.removeItem("token");
-                console.log("Déconnexion réussie");
                 window.location.href = "index.html";
             } else {
                 console.log("Aucun token trouvé.");
