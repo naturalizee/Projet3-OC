@@ -284,31 +284,37 @@ document.addEventListener('DOMContentLoaded', () => {
 
         function checkInputs() {
             if (titreInput.value && categorieSelect.value && photoInput.files.length > 0) {
-                boutonValider.style.backgroundColor = 'green';
+                boutonValider.style.backgroundColor = '#1D6154';
                 boutonValider.disabled = false;
             } else {
-                boutonValider.style.backgroundColor = 'gray';
+                boutonValider.style.backgroundColor = '#B3B3B3';
                 boutonValider.disabled = true;
                 return;
             }
         }
 
         // Affiche l'image lorsqu'elle est sélectionnée
-        photoInput.addEventListener('change', function (event) {
-            checkInputs();
-            const file = event.target.files[0];
-            const reader = new FileReader();
-            reader.onload = function (e) {
-                const previewAjout = document.getElementById('previewAjout');
-                previewAjout.innerHTML = '';
-                const image = document.createElement('img');
-                image.src = e.target.result;
-                image.style.width = '100%';
-                image.style.borderRadius = '10px';
-                previewAjout.appendChild(image);
-            };
+photoInput.addEventListener('change', function (event) {
+    checkInputs();
+    const file = event.target.files[0];
+    const reader = new FileReader();
+    reader.onload = function (e) {
+        if (photoInput.files[0].type === "image/jpeg" || photoInput.files[0].type === "image/png") {
+            const previewAjout = document.getElementById('previewAjout');
+            previewAjout.innerHTML = '';
+            const image = document.createElement('img');
+            image.src = e.target.result;
+            image.style.width = '100%';
+            image.style.borderRadius = '10px';
+            previewAjout.appendChild(image);
             reader.readAsDataURL(file);
-        });
+        } else {
+            afficherMessage("Le format d'image est incorrect");
+        }
+    };
+    reader.readAsDataURL(file);
+});
+
 
         titreInput.addEventListener('input', checkInputs);
         categorieSelect.addEventListener('change', checkInputs);
