@@ -1,6 +1,9 @@
-import { afficherTravaux } from "./index.js";
+/*global fetch, console, document, window, localStorage, FileReader, FormData */
 
-document.addEventListener("DOMContentLoaded", () => {
+
+import {afficherTravaux} from "./index.js";
+
+document.addEventListener("DOMContentLoaded", function () {
     const token = localStorage.getItem("token");
 
     // =====================================================
@@ -11,34 +14,37 @@ document.addEventListener("DOMContentLoaded", () => {
     //     Général
     // =====================================================
 
-    // Création de l"overlay pour la modale
+    // Création de l'overlay pour la modale
     const overlay = document.createElement("div");
     overlay.className = "modal-overlay";
     document.body.appendChild(overlay);
 
     let modal = null;
-    let formAjout;  // Déclaration du formulaire en dehors des fonctions pour le rendre accessible
+    let formAjout;
 
-    // Fonction d"écoute d"ouverture et fermeture de la modale
+    // Fonction d'écoute d'ouverture et fermeture de la modale
     function setupModalListeners() {
-        document.querySelectorAll(".js-open-modal-trigger").forEach(button => {
-            button.addEventListener("click", openModal);
-        });
+        document.querySelectorAll(".js-open-modal-trigger").forEach(
+            function (button) {
+                button.addEventListener("click", openModal);
+            }
+        );
 
-        // Fermer la modale en cliquant en dehors de la modale
+    // Fermer la modale en cliquant en dehors de la modale
         overlay.addEventListener("click", function (event) {
             if (event.target === overlay) {
                 closeModal();
             }
         });
 
-        // Fermer la modale avec la touche échapp
+    // Fermer la modale avec la touche échapp
         window.addEventListener("keydown", function (e) {
             if (e.key === "Escape" || e.key === "Esc") {
                 closeModal();
             }
         });
     }
+
 
     // Fonction pour ouvrir la modale
     const target = document.querySelector(".js-open-modal");
@@ -48,7 +54,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     /**
      * Fonction pour ouvrir la modale
-     * @param {Event} e - L"événement de clic
+     * @param {Event} e - L'événement de clic
      */
     const openModal = function (e) {
         e.preventDefault();
@@ -58,14 +64,15 @@ document.addEventListener("DOMContentLoaded", () => {
             return;
         }
 
-        // Affichage de la modale et de l"overlay
+        // Affichage de la modale et de l'overlay
         overlay.style.display = "block";
         target.style.display = "block";
         target.removeAttribute("aria-hidden");
         target.setAttribute("aria-modal", "true");
         modal = target;
 
-        // Vérifie que modal et les éléments existent avant d"ajouter des écouteurs d"événements
+        // Vérifie que modal et les éléments existent
+        // avant d'ajouter des écouteurs d'événements
         if (modal) {
             overlay.addEventListener("click", closeModal);
             const closeButton = modal.querySelector(".js-close-modal");
@@ -79,7 +86,9 @@ document.addEventListener("DOMContentLoaded", () => {
      * Fonction pour fermer la modale
      */
     function closeModal() {
-        if (!modal) return;
+        if (!modal) {
+            return;
+        }
         overlay.style.display = "none";
         modal.style.display = "none";
         modal.setAttribute("aria-hidden", "true");
@@ -90,8 +99,8 @@ document.addEventListener("DOMContentLoaded", () => {
     setupModalListeners();
 
     /**
-     * Fonction pour récupérer les travaux depuis l"API
-     * @returns {Promise<Array>} Les travaux récupérés depuis l"API
+     * Fonction pour récupérer les travaux depuis l'API
+     * @returns {Promise<Array>} Les travaux récupérés depuis l'API
      */
     async function fetchTravaux() {
         const reponseTravaux = await fetch("http://localhost:5678/api/works", {
@@ -113,13 +122,17 @@ document.addEventListener("DOMContentLoaded", () => {
     async function afficherTravauxModale() {
         try {
             const travaux = await fetchTravaux();
-            const ajoutPhotoContainer = document.querySelector(".ajoutPhotoContainer");
+            const ajoutPhotoContainer = document.querySelector(
+                ".ajoutPhotoContainer"
+            );
             if (!ajoutPhotoContainer) {
-                console.error("L'élément avec la classe 'ajoutPhotoContainer' n'existe pas.");
+                console.error(
+                    "L'élément avec la classe ajoutPhotoContainer n'existe pas."
+                );
                 return;
             }
 
-            // Vide le conteneur avant d"ajouter les nouveaux éléments
+            // Vide le conteneur avant d'ajouter les nouveaux éléments
             ajoutPhotoContainer.innerHTML = "";
 
             // Vérifie si les éléments existent déjà avant de les créer
@@ -128,7 +141,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 closeModalLink.href = "#";
                 closeModalLink.className = "js-close-modal fa-solid fa-x";
                 ajoutPhotoContainer.prepend(closeModalLink);
-                closeModalLink.addEventListener("click", closeModal); // Ajout de l"écouteur d"événement ici
+                closeModalLink.addEventListener("click", closeModal);
             }
 
             if (!document.querySelector(".galeriePhoto")) {
@@ -141,11 +154,12 @@ document.addEventListener("DOMContentLoaded", () => {
             if (!document.getElementById("ajoutPhoto")) {
                 const buttonElement = document.createElement("button");
                 buttonElement.textContent = "Ajouter une photo";
-                buttonElement.id = "ajoutPhoto"; // Définissez l"ID selon vos besoins
+                buttonElement.id = "ajoutPhoto";
                 const modalElement = document.querySelector(".Modale");
                 modalElement.appendChild(buttonElement);
 
-                // Ajout de l"écouteur d"événement pour ouvrir la modale d"ajout de photo
+                // Ajout de l'écouteur d'événement
+                // pour ouvrir la modale d'ajout de photo
                 buttonElement.addEventListener("click", openAjoutPhotoModal);
             }
 
@@ -153,7 +167,7 @@ document.addEventListener("DOMContentLoaded", () => {
             const imagesContainer = document.createElement("div");
             imagesContainer.className = "imagesContainer";
 
-            travaux.forEach(travail => {
+            travaux.forEach(function (travail) {
                 const imageContainer = document.createElement("div");
                 imageContainer.classList.add("imageContainer");
 
@@ -165,12 +179,17 @@ document.addEventListener("DOMContentLoaded", () => {
                 img.alt = travail.title;
 
                 const poubelleIcon = document.createElement("i");
-                poubelleIcon.classList.add("fa-solid", "fa-trash-can", "poubelleIcon");
+                poubelleIcon.classList.add(
+                    "fa-solid",
+                    "fa-trash-can",
+                    "poubelleIcon"
+                );
                 poubelleIcon.setAttribute("data-id", travail.id);
 
                 // Fonction d'écoute des événements de suppression
                 poubelleIcon.addEventListener("click", async function () {
                     await supprimerTravail(travail.id);
+                    afficherTravauxModale();
                     afficherTravaux();
                 });
 
@@ -180,11 +199,14 @@ document.addEventListener("DOMContentLoaded", () => {
                 imagesContainer.appendChild(imageContainer);
             });
 
-            // Ajoute le conteneur des images à la suite de l"en-tête
+            // Ajoute le conteneur des images à la suite de l'en-tête
             ajoutPhotoContainer.appendChild(imagesContainer);
 
         } catch (error) {
-            console.error("Une erreur est survenue lors de l'affichage des travaux :", error);
+            console.error(
+                "Une erreur est survenue lors de l'affichage des travaux :",
+                error
+            );
         }
     }
 
@@ -198,22 +220,31 @@ document.addEventListener("DOMContentLoaded", () => {
      */
     async function supprimerTravail(id) {
         try {
-            const response = await fetch(`http://localhost:5678/api/works/${id}`, {
-                method: "DELETE",
-                headers: {
-                    "Authorization": `Bearer ${token}`
+            const response = await fetch(
+                `http://localhost:5678/api/works/${id}`,
+                {
+                    headers: {
+                        "Authorization": `Bearer ${token}`
+                    },
+                    method: "DELETE"
                 }
-            });
+            );
             if (response.ok) {
                 console.log(`Travail avec ID ${id} supprimé.`);
                 await afficherTravauxModale();
             } else {
-                console.error(`Erreur lors de la suppression du travail avec ID ${id}.`);
+                console.error(
+                    `Erreur lors de la suppression du travail avec ID ${id}.`
+                );
             }
         } catch (error) {
-            console.error(`Erreur lors de la requête de suppression du travail avec ID ${id} :`, error);
+            console.error(
+                `Erreur de requête de suppression du travail ${id} :`,
+                error
+            );
         }
     }
+
 
     // Appel de la fonction pour afficher les travaux
     afficherTravauxModale();
@@ -237,34 +268,44 @@ document.addEventListener("DOMContentLoaded", () => {
         modaleAjoutPhoto.innerHTML = `
         <div id="intModal">
             <div class="stop-modal">
-                <button class="fa-solid fa-arrow-left js-retour-arriere"></button>
-                <button class="fa-solid fa-xmark js-close-ajout-modal"></button>
+                <button class="fa-solid fa-arrow-left js-retour-arriere">
+                </button>
+                <button class="fa-solid fa-xmark js-close-ajout-modal">
+                </button>
             </div>
             <h3>Ajout photo</h3>
             <form id="formAjout" enctype="multipart/form-data">
                 <div id="fondAjout">
                 <div id="previewAjout">
                     <span id="logoAjout" class="fa-regular fa-image"></span>
-                    <label for="image" class="styleAjoutPhoto">+ Ajouter Photo</label>
+                    <label for="image" class="styleAjoutPhoto">+ Ajouter Photo
+                    </label>
                 </div>
-                    <input id="image" type="file" class="hide" name="image" accept="image/png, image/jpeg">
+                    <input id="image" type="file" class="hide"
+                    name="image" accept="image/png, image/jpeg">
                     <p id="format">jpg, png: 4mo max</p>
                 </div>
-                <label id="labelTitre" for="titre">Titre</label>
+                <label id="labelTitre" for="titre">Titre
+                </label>
                 <input id="titre" type="text" name="title">
-                <label id="labelCategorie" for="categorie">Catégorie</label>
+                <label id="labelCategorie" for="categorie">Catégorie
+                </label>
                 <select id="categorie" name="category">
-                <option value="" disabled selected></option>
-                <option value="1">Objets</option>
-                <option value="2">Appartements</option>
-                <option value="3">Hotels & restaurants</option>
+                <option value="" disabled selected>
+                </option>
+                <option value="1">Objets
+                </option>
+                <option value="2">Appartements
+                </option>
+                <option value="3">Hotels & restaurants
+                </option>
                 </select>
                 <input type="submit" id="envoyerProjet" value="Valider">
             </form>
         </div>`;
         overlay.style.display = "block";
         modaleAjoutPhoto.style.display = "block";
-        formAjout = document.getElementById("formAjout");  // Assignation du formulaire ici
+        formAjout = document.getElementById("formAjout");
         setupFormListeners();
     }
 
@@ -273,7 +314,8 @@ document.addEventListener("DOMContentLoaded", () => {
     // =====================================================
 
     /**
-     * Fonction de vérification de remplissage des champs et activer bouton de validation
+     * Fonction de vérification de remplissage
+     * des champs et activer bouton de validation
      */
     function setupFormListeners() {
         const photoInput = document.getElementById("image");
@@ -282,45 +324,62 @@ document.addEventListener("DOMContentLoaded", () => {
         const boutonValider = document.getElementById("envoyerProjet");
 
         function checkInputs() {
-            if (titreInput.value && categorieSelect.value && photoInput.files.length > 0) {
+            if (
+                titreInput.value &&
+                categorieSelect.value &&
+                photoInput.files.length > 0
+            ) {
                 boutonValider.style.backgroundColor = "#1D6154";
                 boutonValider.disabled = false;
             } else {
                 boutonValider.style.backgroundColor = "#B3B3B3";
                 boutonValider.disabled = true;
-                return;
             }
         }
 
-        // Affiche l"image lorsqu"elle est sélectionnée
-photoInput.addEventListener("change", function (event) {
-    checkInputs();
-    const file = event.target.files[0];
-    const reader = new FileReader();
-    reader.onload = function (e) {
-        if (photoInput.files[0].type === "image/jpeg" || photoInput.files[0].type === "image/png") {
-            const previewAjout = document.getElementById("previewAjout");
-            previewAjout.innerHTML = "";
-            const image = document.createElement("img");
-            image.src = e.target.result;
-            image.style.width = "100%";
-            image.style.borderRadius = "10px";
-            previewAjout.appendChild(image);
+        // Affiche l'image lorsqu'elle est sélectionnée
+        photoInput.addEventListener("change", function (event) {
+            checkInputs();
+            const file = event.target.files[0];
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                if (
+                    photoInput.files[0].type === "image/jpeg" ||
+                    photoInput.files[0].type === "image/png"
+                ) {
+                    const previewAjout = document.getElementById(
+                        "previewAjout"
+                    );
+                    previewAjout.innerHTML = "";
+                    const image = document.createElement("img");
+                    image.src = e.target.result;
+                    image.style.width = "100%";
+                    image.style.borderRadius = "10px";
+                    previewAjout.appendChild(image);
+                } else {
+                    afficherMessage("Le format d'image est incorrect");
+                }
+            };
             reader.readAsDataURL(file);
-        } else {
-            afficherMessage("Le format d'image est incorrect");
-        }
-    };
-    reader.readAsDataURL(file);
-});
+        });
 
 
-        titreInput.addEventListener("input", checkInputs);
-        categorieSelect.addEventListener("change", checkInputs);
 
-        // Ajout des écouteurs pour fermer la modale d"ajout de photo
-        document.querySelector(".js-close-ajout-modal").addEventListener("click", closeAjoutPhotoModal);
-        document.querySelector(".js-retour-arriere").addEventListener("click", retourArriereModal);
+        titreInput.addEventListener(
+            "input",
+            checkInputs
+        );
+        categorieSelect.addEventListener(
+            "change",
+            checkInputs
+        );
+
+        // Ajout des écouteurs pour fermer la modale d'ajout de photo
+        const closeAjoutModal = document.querySelector(".js-close-ajout-modal");
+        closeAjoutModal.addEventListener("click", closeAjoutPhotoModal);
+
+        const retourArriere = document.querySelector(".js-retour-arriere");
+        retourArriere.addEventListener("click", retourArriereModal);
 
         // Fermer la modale en cliquant en dehors de la modale
         overlay.addEventListener("click", function (event) {
@@ -329,20 +388,22 @@ photoInput.addEventListener("change", function (event) {
             }
         });
 
-        // Ajout de l"écouteur d"événement pour fermer la modale avec la touche echap
+
+        // Ajout de l'écouteur d'événement
+        // pour fermer la modale avec la touche échapp
         window.addEventListener("keydown", function (e) {
             if (e.key === "Escape" || e.key === "Esc") {
                 closeAjoutPhotoModal(e);
             }
         });
 
-        // Ajout de l"écouteur d"événement pour le bouton Valider
+        // Ajout de l'écouteur d'événement pour le bouton Valider
         boutonValider.addEventListener("click", validerProjet);
     }
 
     /**
-     * Fonction pour fermer la modale d"ajout de photo
-     * @param {Event} e - L"événement de clic
+     * Fonction pour fermer la modale d'ajout de photo
+     * @param {Event} e - L'événement de clic
      */
     const closeAjoutPhotoModal = function (e) {
         e.preventDefault();
@@ -352,7 +413,7 @@ photoInput.addEventListener("change", function (event) {
 
     /**
      * Fonction pour revenir en arrière dans la modale
-     * @param {Event} e - L"événement de clic
+     * @param {Event} e - L'événement de clic
      */
     const retourArriereModal = function (e) {
         e.preventDefault();
@@ -368,12 +429,12 @@ photoInput.addEventListener("change", function (event) {
 
     /**
      * Fonction pour envoyer le projet et le stocker
-     * @param {Event} event - L"événement de soumission du formulaire
+     * @param {Event} event - L'événement de soumission du formulaire
      */
     async function validerProjet(event) {
-        event.preventDefault();  // Empêcher le comportement par défaut du formulaire
+        event.preventDefault();
 
-        const formAjout = document.getElementById("formAjout");
+        formAjout = document.getElementById("formAjout");
         if (!formAjout) {
             console.error("Le formulaire d'ajout n'a pas été trouvé.");
             return;
@@ -383,8 +444,10 @@ photoInput.addEventListener("change", function (event) {
         const categoryId = document.getElementById("categorie").value;
         const imageId = document.getElementById("image").files[0];
 
-        if (!title || !categoryId || !image) {
-            afficherMessage("Tous les champs du formulaire ne sont pas remplis.");
+        if (!title || !categoryId || !imageId) {
+            afficherMessage(
+                "Tous les champs du formulaire ne sont pas remplis."
+            );
             return;
         }
 
@@ -394,43 +457,42 @@ photoInput.addEventListener("change", function (event) {
             nouveauProjet.append("image", imageId);
             nouveauProjet.append("category", categoryId);
 
-            const token = localStorage.getItem("token");
+            const tokenPost = localStorage.getItem("token");
             const response = await fetch("http://localhost:5678/api/works", {
-                method: "POST",
+                body: nouveauProjet,
                 headers: {
-                    "Authorization": `Bearer ${token}`
+                    "Authorization": `Bearer ${tokenPost}`
                 },
-                body: nouveauProjet
+                method: "POST"
             });
             if (response.ok) {
                 afficherTravaux();
                 afficherTravauxModale();
                 closeAjoutPhotoModal(event);
             } else {
-                afficherMessage("Erreur lors de l'ajout du projet.", error);
+                afficherMessage("Erreur lors de l'ajout du projet.");
             }
         } catch (error) {
             console.error("Erreur lors de la requête POST:", error);
             afficherMessage("Une erreur est survenue. Veuillez réessayer.");
         }
-    };
+    }
 
     /**
-     * Fonction pour afficher un message d"erreur
-     * @param {string} message - Le message d"erreur à afficher
+     * Fonction pour afficher un message d'erreur
+     * @param {string} message - Le message d'erreur à afficher
      */
     function afficherMessage(message) {
-        const boutonValider = document.getElementById("envoyerProjet")
-        const erreurPrecedente = document.querySelector(".message-erreur")
+        const boutonValider = document.getElementById("envoyerProjet");
+        const erreurPrecedente = document.querySelector(".message-erreur");
         if (erreurPrecedente) {
-            erreurPrecedente.remove()
+            erreurPrecedente.remove();
         }
         const erreurMessage = document.createElement("p");
-        erreurMessage.classList.add("message-erreur")
+        erreurMessage.classList.add("message-erreur");
         erreurMessage.textContent = message;
         erreurMessage.style.color = "red";
         erreurMessage.style.marginBottom = "10px";
         boutonValider.parentNode.insertBefore(erreurMessage, boutonValider);
-    };
-
+    }
 });

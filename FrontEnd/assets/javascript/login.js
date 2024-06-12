@@ -1,3 +1,6 @@
+/*global fetch, console, document, window, localStorage */
+
+
 // =====================================================
 //     Récupération des éléments du formulaire de login
 // =====================================================
@@ -18,10 +21,10 @@ seConnecter.addEventListener("click", login);
  */
 async function login(event) {
     event.preventDefault();
-    
+
     const valeurEmail = email.value;
     const valeurPassword = password.value;
-    
+
     // Validation des champs
     if (!valeurEmail || !valeurPassword) {
         afficherMessage("Veuillez remplir tous les champs.");
@@ -30,9 +33,11 @@ async function login(event) {
 
     try {
         const response = await fetch("http://localhost:5678/api/users/login", {
-            method: "POST",
-            headers: { "content-type": "application/json" },
-            body: JSON.stringify({ email: valeurEmail, password: valeurPassword })
+            body: JSON.stringify(
+                {email: valeurEmail, password: valeurPassword}
+            ),
+            headers: {"content-type": "application/json"},
+            method: "POST"
         });
         const data = await response.json();
 
@@ -79,7 +84,11 @@ const togglePassword = document.getElementById("toggle-password");
 const passwordField = document.getElementById("password");
 
 togglePassword.addEventListener("click", function () {
-    const type = passwordField.getAttribute("type") === "password" ? "text" : "password";
+    const type = (
+        passwordField.getAttribute("type") === "password"
+        ? "text"
+        : "password"
+    );
     passwordField.setAttribute("type", type);
     togglePassword.classList.toggle("fa-eye-slash");
     togglePassword.classList.toggle("fa-eye");

@@ -1,3 +1,6 @@
+/*global fetch, console, document, window, localStorage */
+
+
 // =====================================================
 //     Sélection des éléments DOM
 // =====================================================
@@ -11,8 +14,8 @@ const boutonLogout = document.querySelector(".LogOut");
 /**
  * Gère la déconnexion de l"utilisateur.
  */
-async function btnLogout() {
-    boutonLogout.addEventListener("click", async () => {
+function btnLogout() {
+    boutonLogout.addEventListener("click", function () {
         try {
             if (localStorage.getItem("token")) {
                 localStorage.removeItem("token");

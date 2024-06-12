@@ -1,12 +1,11 @@
-/*global fetch, console, document */
-
+/*global fetch, console, document, localStorage */
 
 // =====================================================
 //     API Calls
 // =====================================================
 
 /**
- * Récupération des catégories et travaux avec l"API.
+ * Récupération des catégories et travaux avec l'API.
  * @returns {Object} Contient les travaux et les catégories.
  */
 async function fetchTravauxEtCategories() {
@@ -29,7 +28,7 @@ async function fetchTravauxEtCategories() {
         }
         const categories = await reponseCategories.json();
 
-        return { categories, travaux };
+        return {categories, travaux};
     } catch (error) {
         console.error(error);
         return;
@@ -37,15 +36,15 @@ async function fetchTravauxEtCategories() {
 }
 
 // =====================================================
-//     Gestion des messages d"erreur
+//     Gestion des messages d'erreur
 // =====================================================
 
 /**
- * Affiche un message d"erreur.
+ * Affiche un message d'erreur.
  * @param {string} message - Le message à afficher.
  */
 const portfolio = document.getElementById("portfolio");
-export function afficherMessage(message) {
+function afficherMessage(message) {
     "use strict";
     const erreurPrecedente = document.querySelector(".message-erreur");
     if (erreurPrecedente) {
@@ -60,7 +59,6 @@ export function afficherMessage(message) {
 
     portfolio.appendChild(erreurMessage);
 }
-Object.freeze(afficherMessage);
 
 // =====================================================
 //     Affichage des travaux
@@ -69,12 +67,12 @@ Object.freeze(afficherMessage);
 /**
  * Affiche dynamiquement les travaux avec possibilité de filtrer
  */
-export async function afficherTravaux() {
+async function afficherTravaux() {
     "use strict";
     try {
-        const { categories, travaux } = await fetchTravauxEtCategories();
+        const {categories, travaux} = await fetchTravauxEtCategories();
 
-        // Création d'une div d"affichage des projets
+        // Création d'une div d'affichage des projets
         const gallery = document.createElement("div");
         gallery.classList.add("gallery");
         portfolio.appendChild(gallery);
@@ -91,10 +89,16 @@ export async function afficherTravaux() {
         tous.classList = "btnTous";
         tous.name = "Tous";
 
-        // Ajout du gestionnaire d"événements pour afficher tous les travaux
+        // Ajout du gestionnaire d'événements pour afficher tous les travaux
         tous.addEventListener("click", function () {
             afficherTravauxParCategorie(travaux);
         });
+
+        // Insertion du bouton "Tous" comme premier enfant de filtresCategories
+        const filtresCategories = document.getElementById(
+            "filtres-categories"
+        );
+        filtresCategories.insertBefore(tous, filtresCategories.firstChild);
 
         // Création des boutons pour chaque catégorie
         categories.forEach(function (cat) {
@@ -104,7 +108,7 @@ export async function afficherTravaux() {
             boutonCat.classList = "btnCat";
             boutonCat.name = cat.id;
 
-            // Gestionnaire d"événements pour afficher les travaux
+            // Gestionnaire d'événements pour afficher les travaux
             // de la catégorie sélectionnée
             boutonCat.addEventListener("click", function () {
                 const travauxFiltres = travaux.filter(function (travail) {
@@ -112,11 +116,6 @@ export async function afficherTravaux() {
                 });
                 afficherTravauxParCategorie(travauxFiltres);
             });
-
-            const filtresCategories = document.getElementById(
-                "filtres-categories"
-            );
-            filtresCategories.insertBefore(tous, filtresCategories.firstChild);
             filtresCategories.appendChild(boutonCat);
         });
 
@@ -130,10 +129,13 @@ export async function afficherTravaux() {
         console.error("Une erreur est survenue:", error);
     }
 }
-Object.freeze(afficherTravaux);
+
+// =====================================================
+//     Affichage des travaux par catégorie
+// =====================================================
 
 /**
- * Affiche les travaux d"une catégorie spécifique.
+ * Affiche les travaux d'une catégorie spécifique.
  * @param {Array} travaux - Liste des travaux à afficher.
  */
 function afficherTravauxParCategorie(travaux) {
@@ -157,3 +159,8 @@ function afficherTravauxParCategorie(travaux) {
 
 // Appel de la fonction pour afficher les travaux avec les filtres par catégorie
 afficherTravaux();
+
+// Gel des fonctions exportées
+Object.freeze(afficherTravaux);
+
+export {afficherTravaux};
