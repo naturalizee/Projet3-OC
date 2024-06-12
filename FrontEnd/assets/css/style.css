@@ -70,6 +70,7 @@ th,
 td,
 article,
 aside,
+dialog,
 canvas,
 details,
 embed,
@@ -107,6 +108,7 @@ header,
 hgroup,
 menu,
 nav,
+dialog,
 section {
 	display: block;
 }
@@ -166,7 +168,7 @@ figcaption {
 header {
 	display: flex;
 	justify-content: space-between;
-	margin: 50px 0;
+	margin: 30px 0;
 }
 
 h1 {

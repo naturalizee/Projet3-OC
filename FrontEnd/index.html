@@ -15,9 +15,9 @@
     <link rel="stylesheet" href="./assets/css/style.css">
     <link rel="stylesheet" href="./assets/css/modale.css">
     <script src="https://kit.fontawesome.com/25db7173f3.js" crossorigin="anonymous"></script>
-    <script type="module" src="./assets/javascript/index.js" defer></script>
+    <script type="module" src="./assets/javascript/index.js"></script>
     <script src="./assets/javascript/index-admin.js" defer></script>
-    <script type="module" src="./assets/javascript/modal.js" defer></script>
+    <script type="module" src="./assets/javascript/modal.js"></script>
     <script src="./assets/javascript/logout.js" defer></script>
 </head>
 
@@ -37,7 +37,7 @@
     </header>
 
     <main>
-        <section id="introduction">
+        <div id="introduction">
             <!-- Section d'introduction avec image et texte -->
             <figure>
                 <img src="./assets/images/sophie-bluel.png" alt="Photo de Sophie Bluel">
@@ -52,7 +52,7 @@
                 <p>En cas de besoin, une équipe pluridisciplinaire peut-être constituée : architecte DPLG,
                     décorateur(trice)</p>
             </article>
-        </section>
+        </div>
 
         <section id="portfolio">
             <!-- Section des projets avec possibilité de modification pour les administrateurs -->
@@ -65,14 +65,14 @@
             </div>
 
             <!-- Modales pour la gestion des projets -->
-            <aside class="Modale js-open-modal" aria-hidden="true" role="dialog" style="display: none;">
+            <dialog class="Modale js-open-modal" aria-hidden="true" style="display: none;">
                 <div class="ajoutPhotoContainer">
                     <!-- modal.js Contenu de la modale de suppression de projets -->
                 </div>
-            </aside>
-            <aside class="modale-ajout-photo" aria-hidden="true" role="dialog" style="display: none;">
+            </dialog>
+            <dialog class="modale-ajout-photo" aria-hidden="true" style="display: none;">
                 <!-- modal.js Contenu de la modale d'ajout de projets -->
-            </aside>
+            </dialog>
 
             <!-- Filtres de catégories -->
             <div id="filtres-categories">

@@ -9,7 +9,7 @@ const boutonLogout = document.querySelector(".LogOut");
 // =====================================================
 
 /**
- * Gère la déconnexion de l'utilisateur.
+ * Gère la déconnexion de l"utilisateur.
  */
 async function btnLogout() {
     boutonLogout.addEventListener("click", async () => {
@@ -18,7 +18,7 @@ async function btnLogout() {
                 localStorage.removeItem("token");
                 window.location.href = "index.html";
             } else {
-                console.log("Aucun token trouvé.");
+                console.error("Aucun token trouvé.");
             }
         } catch (error) {
             console.error("Erreur lors de la déconnexion :", error);
@@ -26,5 +26,5 @@ async function btnLogout() {
     });
 }
 
-// Appel de la fonction pour initialiser les écouteurs d'événements
+// Appel de la fonction pour initialiser les écouteurs d"événements
 btnLogout();

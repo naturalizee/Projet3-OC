@@ -1,3 +1,6 @@
+/*global fetch, console, document, localStorage */
+
+
 // =====================================================
 //     Sélection des éléments DOM
 // =====================================================
@@ -9,15 +12,15 @@ const login = document.querySelector(".login");
 const instagram = document.querySelector(".instagram");
 
 // =====================================================
-//     Création bandeau d'édition
+//     Création bandeau d"édition
 // =====================================================
 
 /**
- * Crée le bandeau d'édition et l'ajoute avant l'en-tête.
+ * Crée le bandeau d"édition et l"ajoute avant l"en-tête.
  */
 function creerBandeauEdition() {
-    let bandeauEditionHTML = ` 
-    <div class="bandeauEdition" 
+    let bandeauEditionHTML = `
+    <div class="bandeauEdition"
         style="
         text-align: center;
         display:none;
@@ -34,11 +37,11 @@ function creerBandeauEdition() {
         left: 0;
     "><i class="fa-solid fa-pen-to-square"></i> Mode édition</div>
     `;
-    header.insertAdjacentHTML('beforebegin', bandeauEditionHTML);
-    header.style.paddingTop = "calc(+50px)";
+    header.insertAdjacentHTML("beforebegin", bandeauEditionHTML);
+    header.style.paddingTop = "50px";
 }
 
-// Appel de la fonction pour créer le bandeau d'édition
+// Appel de la fonction pour créer le bandeau d"édition
 creerBandeauEdition();
 
 // =====================================================
@@ -46,7 +49,7 @@ creerBandeauEdition();
 // =====================================================
 
 /**
- * Crée l'élément de déconnexion et l'ajoute à la navigation.
+ * Crée l"élément de déconnexion et l"ajoute à la navigation.
  */
 function creerNavLogout() {
     let LogOutHTML = document.createElement("li");
@@ -56,7 +59,7 @@ function creerNavLogout() {
     instagram.parentNode.insertBefore(LogOutHTML, instagram);
 }
 
-// Appel de la fonction pour créer l'élément de déconnexion
+// Appel de la fonction pour créer l"élément de déconnexion
 creerNavLogout();
 
 // =====================================================
@@ -76,10 +79,11 @@ const filtresCategories = document.getElementById("filtres-categories");
 // =====================================================
 
 /**
- * Affiche les éléments d'édition si l'utilisateur est connecté.
- * @returns {Promise<void>} Une promesse qui est résolue quand l'apparition est terminée.
+ * Affiche les éléments d"édition si l"utilisateur est connecté.
+ * @returns {Promise<void>}
+ * Une promesse qui est résolue quand l"apparition est terminée.
  */
-async function apparitionEdition() {
+function apparitionEdition() {
     try {
         const verifConnection = localStorage.getItem("token");
 
@@ -96,5 +100,6 @@ async function apparitionEdition() {
     }
 }
 
-// Appel de la fonction pour vérifier la connexion et afficher les éléments d'édition
+// Appel de la fonction pour vérifier la connexion
+// et afficher les éléments d"édition
 apparitionEdition();

@@ -1,42 +1,52 @@
+/*global fetch, console, document */
+
+
 // =====================================================
 //     API Calls
 // =====================================================
 
 /**
- * Récupération des catégories et travaux avec l'API.
+ * Récupération des catégories et travaux avec l"API.
  * @returns {Object} Contient les travaux et les catégories.
  */
 async function fetchTravauxEtCategories() {
     try {
-        const reponseTravaux = await fetch("http://localhost:5678/api/works");
+        const reponseTravaux = await fetch(
+            "http://localhost:5678/api/works"
+        );
         if (!reponseTravaux.ok) {
-            throw new Error("Erreur lors de la récupération des travaux");
+            console.error("Erreur lors de la récupération des travaux");
+            return;
         }
         const travaux = await reponseTravaux.json();
 
-        const reponseCategories = await fetch("http://localhost:5678/api/categories");
+        const reponseCategories = await fetch(
+            "http://localhost:5678/api/categories"
+        );
         if (!reponseCategories.ok) {
-            throw new Error("Erreur lors de la récupération des catégories");
+            console.error("Erreur lors de la récupération des catégories");
+            return;
         }
         const categories = await reponseCategories.json();
 
-        return { travaux, categories };
+        return { categories, travaux };
     } catch (error) {
         console.error(error);
-        throw error;
+        return;
     }
 }
 
 // =====================================================
-//     Gestion des messages d'erreur
+//     Gestion des messages d"erreur
 // =====================================================
 
 /**
- * Affiche un message d'erreur.
+ * Affiche un message d"erreur.
  * @param {string} message - Le message à afficher.
  */
 const portfolio = document.getElementById("portfolio");
 export function afficherMessage(message) {
+    "use strict";
     const erreurPrecedente = document.querySelector(".message-erreur");
     if (erreurPrecedente) {
         erreurPrecedente.remove();
@@ -50,26 +60,28 @@ export function afficherMessage(message) {
 
     portfolio.appendChild(erreurMessage);
 }
+Object.freeze(afficherMessage);
 
 // =====================================================
 //     Affichage des travaux
 // =====================================================
 
 /**
- * Affiche dynamiquement les travaux avec la possibilité de filtrer par catégorie.
+ * Affiche dynamiquement les travaux avec possibilité de filtrer
  */
 export async function afficherTravaux() {
+    "use strict";
     try {
-        const { travaux, categories } = await fetchTravauxEtCategories();
+        const { categories, travaux } = await fetchTravauxEtCategories();
 
-        // Création d'une div d'affichage des projets
-        const gallery = document.createElement('div');
-        gallery.classList.add('gallery');
+        // Création d'une div d"affichage des projets
+        const gallery = document.createElement("div");
+        gallery.classList.add("gallery");
         portfolio.appendChild(gallery);
 
-        // Création des boutons de filtre par catégorie
-        const filtres = document.createElement('div');
-        filtres.classList.add('filtres');
+        // Création d'une div pour les filtres
+        const filtres = document.createElement("div");
+        filtres.classList.add("filtres");
         filtres.id = "filtres-categories";
 
         // Création du bouton "Tous" pour afficher toutes les catégories
@@ -79,27 +91,32 @@ export async function afficherTravaux() {
         tous.classList = "btnTous";
         tous.name = "Tous";
 
-        // Ajout du gestionnaire d'événements pour afficher tous les travaux
-        tous.addEventListener('click', () => {
+        // Ajout du gestionnaire d"événements pour afficher tous les travaux
+        tous.addEventListener("click", function () {
             afficherTravauxParCategorie(travaux);
         });
-        filtresCategories.appendChild(tous);
 
         // Création des boutons pour chaque catégorie
-        categories.forEach(cat => {
+        categories.forEach(function (cat) {
             const boutonCat = document.createElement("button");
             boutonCat.textContent = cat.name;
             boutonCat.id = "bouton-" + cat.id;
             boutonCat.classList = "btnCat";
             boutonCat.name = cat.id;
 
-            // Ajout du gestionnaire d'événements pour afficher les travaux de la catégorie sélectionnée
-            boutonCat.addEventListener('click', () => {
-                const travauxFiltres = travaux.filter(travail => travail.category.id === cat.id);
+            // Gestionnaire d"événements pour afficher les travaux
+            // de la catégorie sélectionnée
+            boutonCat.addEventListener("click", function () {
+                const travauxFiltres = travaux.filter(function (travail) {
+                    return travail.category.id === cat.id;
+                });
                 afficherTravauxParCategorie(travauxFiltres);
             });
 
-            const filtresCategories = document.getElementById("filtres-categories");
+            const filtresCategories = document.getElementById(
+                "filtres-categories"
+            );
+            filtresCategories.insertBefore(tous, filtresCategories.firstChild);
             filtresCategories.appendChild(boutonCat);
         });
 
@@ -113,21 +130,23 @@ export async function afficherTravaux() {
         console.error("Une erreur est survenue:", error);
     }
 }
+Object.freeze(afficherTravaux);
 
 /**
- * Affiche les travaux d'une catégorie spécifique.
+ * Affiche les travaux d"une catégorie spécifique.
  * @param {Array} travaux - Liste des travaux à afficher.
  */
 function afficherTravauxParCategorie(travaux) {
-    const gallery = document.querySelector('.gallery');
-    gallery.innerHTML = '';
-    travaux.forEach(travail => {
-        const figure = document.createElement('figure');
-        const img = document.createElement('img');
+    "use strict";
+    const gallery = document.querySelector(".gallery");
+    gallery.innerHTML = "";
+    travaux.forEach(function (travail) {
+        const figure = document.createElement("figure");
+        const img = document.createElement("img");
         img.src = travail.imageUrl;
         img.alt = travail.title;
 
-        const figcaption = document.createElement('figcaption');
+        const figcaption = document.createElement("figcaption");
         figcaption.textContent = travail.title;
 
         figure.appendChild(img);

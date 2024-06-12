@@ -13,8 +13,8 @@ seConnecter.addEventListener("click", login);
 // =====================================================
 
 /**
- * Gère la connexion de l'utilisateur.
- * @param {Event} event - L'événement de soumission du formulaire.
+ * Gère la connexion de l"utilisateur.
+ * @param {Event} event - L"événement de soumission du formulaire.
  */
 async function login(event) {
     event.preventDefault();
@@ -44,18 +44,18 @@ async function login(event) {
             afficherMessage("Erreur dans l’identifiant ou le mot de passe");
         }
     } catch (error) {
-        afficherMessage("Une erreur est survenue lors de la connexion. Veuillez réessayer plus tard.");
+        afficherMessage("Une erreur est survenue lors de la connexion.");
         console.error("Erreur lors de la connexion:", error);
     }
 }
 
 // =====================================================
-//     Message d'erreur mail ou mdp
+//     Message d"erreur mail ou mdp
 // =====================================================
 
 /**
- * Affiche un message d'erreur.
- * @param {string} message - Le message d'erreur à afficher.
+ * Affiche un message d"erreur.
+ * @param {string} message - Le message d"erreur à afficher.
  */
 function afficherMessage(message) {
     const erreurPrecedente = document.querySelector(".message-erreur");
@@ -75,12 +75,12 @@ function afficherMessage(message) {
 //     Mot de passe visible ou crypté
 // =====================================================
 
-const togglePassword = document.getElementById('toggle-password');
-const passwordField = document.getElementById('password');
+const togglePassword = document.getElementById("toggle-password");
+const passwordField = document.getElementById("password");
 
-togglePassword.addEventListener('click', function () {
-    const type = passwordField.getAttribute('type') === 'password' ? 'text' : 'password';
-    passwordField.setAttribute('type', type);
-    togglePassword.classList.toggle('fa-eye-slash');
-    togglePassword.classList.toggle('fa-eye');
+togglePassword.addEventListener("click", function () {
+    const type = passwordField.getAttribute("type") === "password" ? "text" : "password";
+    passwordField.setAttribute("type", type);
+    togglePassword.classList.toggle("fa-eye-slash");
+    togglePassword.classList.toggle("fa-eye");
 });
