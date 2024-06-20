@@ -28,7 +28,7 @@ async function fetchTravauxEtCategories() {
         }
         const categories = await reponseCategories.json();
 
-        return {categories, travaux};
+        return { categories, travaux };
     } catch (error) {
         console.error(error);
         return;
@@ -70,7 +70,7 @@ function afficherMessage(message) {
 async function afficherTravaux() {
     "use strict";
     try {
-        const {categories, travaux} = await fetchTravauxEtCategories();
+        const { categories, travaux } = await fetchTravauxEtCategories();
 
         // Création d'une div d'affichage des projets
         const gallery = document.createElement("div");
@@ -160,7 +160,5 @@ function afficherTravauxParCategorie(travaux) {
 // Appel de la fonction pour afficher les travaux avec les filtres par catégorie
 afficherTravaux();
 
-// Gel des fonctions exportées
-Object.freeze(afficherTravaux);
 
-export {afficherTravaux};
+export { afficherTravaux };

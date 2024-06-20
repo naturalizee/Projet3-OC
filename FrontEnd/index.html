@@ -29,7 +29,7 @@
             <ul>
                 <!-- Liens de navigation -->
                 <li class="projets"><a href="#ancre-projets" class="active">projets</a></li>
-                <li>contact</li>
+                <li><a href="#contact">contact</a></li>
                 <li class="login"><a href="./assets/html/login.html">login</a></li>
                 <li class="instagram"><img src="assets/icons/instagram.png" alt="Instagram"></li>
             </ul>
@@ -59,8 +59,8 @@
             <div class="titreEtModifier">
                 <h2 class="mesProjets" id="ancre-projets">Mes Projets</h2>
                 <div class="boutonModifier js-open-modal-trigger" style="display: none;">
-                    <i class="fa-regular fa-pen-to-square"></i>Modifier 
-                        <!-- index-admin.js Bouton de modif projets-->
+                    <i class="fa-regular fa-pen-to-square"></i>Modifier
+                    <!-- index-admin.js Bouton de modif projets-->
                 </div>
             </div>
 
@@ -70,8 +70,40 @@
                     <!-- modal.js Contenu de la modale de suppression de projets -->
                 </div>
             </dialog>
-            <dialog class="modale-ajout-photo" aria-hidden="true" style="display: none;">
+            <dialog class="modale-ajout-photo" aria-hidden="true">
                 <!-- modal.js Contenu de la modale d'ajout de projets -->
+                <div id="intModal">
+                    <div class="stop-modal">
+                        <button class="fa-solid fa-arrow-left js-retour-arriere">
+                        </button>
+                        <button class="fa-solid fa-xmark js-close-ajout-modal">
+                        </button>
+                    </div>
+                    <h3>Ajout photo</h3>
+                    <form id="formAjout" enctype="multipart/form-data">
+                        <div id="fondAjout">
+                        <div id="previewAjout">
+                            <span id="logoAjout" class="fa-regular fa-image"></span>
+                            <label for="image" class="styleAjoutPhoto">+ Ajouter Photo
+                            </label>
+                        </div>
+                            <input id="image" type="file" class="hide"
+                            name="image" accept="image/png, image/jpeg">
+                            <p id="format">jpg, png: 4mo max</p>
+                        </div>
+                        <label id="labelTitre" for="titre">Titre
+                        </label>
+                        <input id="titre" type="text" name="title">
+                        <label id="labelCategorie" for="categorie">Catégorie
+                        </label>
+                        <select id="categorie" name="category">
+                        <option value="" disabled selected>
+                        </option>
+                        <!-- Affichage dynamique des catégories -->
+                        </select>
+                        <input type="submit" id="envoyerProjet" value="Valider">
+                    </form>
+                </div>
             </dialog>
 
             <!-- Filtres de catégories -->

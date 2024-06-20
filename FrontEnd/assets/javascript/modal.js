@@ -1,7 +1,7 @@
 /*global fetch, console, document, window, localStorage, FileReader, FormData */
 
 
-import {afficherTravaux} from "./index.js";
+import { afficherTravaux } from "./index.js";
 
 document.addEventListener("DOMContentLoaded", function () {
     const token = localStorage.getItem("token");
@@ -30,14 +30,14 @@ document.addEventListener("DOMContentLoaded", function () {
             }
         );
 
-    // Fermer la modale en cliquant en dehors de la modale
+        // Fermer la modale en cliquant en dehors de la modale
         overlay.addEventListener("click", function (event) {
             if (event.target === overlay) {
                 closeModal();
             }
         });
 
-    // Fermer la modale avec la touche échapp
+        // Fermer la modale avec la touche échapp
         window.addEventListener("keydown", function (e) {
             if (e.key === "Escape" || e.key === "Esc") {
                 closeModal();
@@ -158,8 +158,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 const modalElement = document.querySelector(".Modale");
                 modalElement.appendChild(buttonElement);
 
-                // Ajout de l'écouteur d'événement
-                // pour ouvrir la modale d'ajout de photo
+                // Ajout de l'écouteur d'événement pour ouvrir la modale d'ajout de photo
                 buttonElement.addEventListener("click", openAjoutPhotoModal);
             }
 
@@ -257,57 +256,88 @@ document.addEventListener("DOMContentLoaded", function () {
     //     Général
     // =====================================================
 
-    const modaleAjoutPhoto = document.createElement("div");
-    modaleAjoutPhoto.className = "modale-ajout-photo";
-    modaleAjoutPhoto.style.display = "none";
-    document.body.appendChild(modaleAjoutPhoto);
+    const modaleAjoutPhoto = document.querySelector(".modale-ajout-photo");
 
     // Création de la modale
     function openAjoutPhotoModal() {
         closeModal();
-        modaleAjoutPhoto.innerHTML = `
-        <div id="intModal">
-            <div class="stop-modal">
-                <button class="fa-solid fa-arrow-left js-retour-arriere">
-                </button>
-                <button class="fa-solid fa-xmark js-close-ajout-modal">
-                </button>
-            </div>
-            <h3>Ajout photo</h3>
-            <form id="formAjout" enctype="multipart/form-data">
-                <div id="fondAjout">
-                <div id="previewAjout">
-                    <span id="logoAjout" class="fa-regular fa-image"></span>
-                    <label for="image" class="styleAjoutPhoto">+ Ajouter Photo
-                    </label>
-                </div>
-                    <input id="image" type="file" class="hide"
-                    name="image" accept="image/png, image/jpeg">
-                    <p id="format">jpg, png: 4mo max</p>
-                </div>
-                <label id="labelTitre" for="titre">Titre
-                </label>
-                <input id="titre" type="text" name="title">
-                <label id="labelCategorie" for="categorie">Catégorie
-                </label>
-                <select id="categorie" name="category">
-                <option value="" disabled selected>
-                </option>
-                <option value="1">Objets
-                </option>
-                <option value="2">Appartements
-                </option>
-                <option value="3">Hotels & restaurants
-                </option>
-                </select>
-                <input type="submit" id="envoyerProjet" value="Valider">
-            </form>
-        </div>`;
         overlay.style.display = "block";
         modaleAjoutPhoto.style.display = "block";
-        formAjout = document.getElementById("formAjout");
         setupFormListeners();
+
+        // Appel de la fonction pour récupérer et afficher les catégories
+        fetchCategories().then(result => {
+            if (result && result.categories) {
+                afficherCategories(result.categories);
+            }
+        });
     }
+
+    // Appel à l'API pour l'affichage des catégories
+    /**
+    * Récupération des catégories avec l'API.
+    * @returns {Object} Contient les catégories.
+    */
+    async function fetchCategories() {
+        try {
+            const reponseCategories = await fetch(
+                "http://localhost:5678/api/categories"
+            );
+            if (!reponseCategories.ok) {
+                console.error("Erreur lors de la récupération des catégories");
+                return;
+            }
+            const categories = await reponseCategories.json();
+
+            return { categories };
+        } catch (error) {
+            console.error(error);
+            return;
+        }
+    }
+
+    function afficherCategories(categories) {
+        "use strict";
+        const listeCategories = document.getElementById("categorie");
+    
+        categories.forEach(function (category) {
+            if (!Array.from(listeCategories.options).some
+            (option => option.value == category.id)) {
+                const optionCategorie = document.createElement("option");
+                optionCategorie.value = category.id;
+                optionCategorie.textContent = category.name;
+                listeCategories.appendChild(optionCategorie);
+            }
+        });
+    }
+    
+    // Fonction pour réinitialiser les champs de la modale d'ajout de photo
+    function resetAjoutPhotoModal() {
+        const photoInput = document.getElementById("image");
+        const titreInput = document.getElementById("titre");
+        const categorieSelect = document.getElementById("categorie");
+        const previewAjout = document.getElementById("previewAjout");
+        const boutonValider = document.getElementById("envoyerProjet");
+    
+        if (photoInput) {
+            photoInput.value = "";
+        }
+        if (titreInput) {
+            titreInput.value = "";
+        }
+        if (categorieSelect) {
+            categorieSelect.selectedIndex = 0;
+        }
+        if (previewAjout) {
+            previewAjout.innerHTML = '<span id="logoAjout" class="fa-regular fa-image"></span><label for="image" class="styleAjoutPhoto">+ Ajouter Photo</label>';
+        }
+        if (boutonValider) {
+            boutonValider.style.backgroundColor = "#B3B3B3";
+            boutonValider.disabled = true;
+        }
+        clearErrorMessage();
+    };
+    
 
     // =====================================================
     //     Validation et prévisualisation
@@ -344,9 +374,13 @@ document.addEventListener("DOMContentLoaded", function () {
             const reader = new FileReader();
             reader.onload = function (e) {
                 if (
-                    photoInput.files[0].type === "image/jpeg" ||
-                    photoInput.files[0].type === "image/png"
+                    photoInput.files[0].type !== "image/jpeg" &&
+                    photoInput.files[0].type !== "image/png" ||
+                    photoInput.files[0].size >= 4 * 1024 * 1024
                 ) {
+                    afficherMessage("Le format d'image est incorrect");
+                    return;
+                } else {
                     const previewAjout = document.getElementById(
                         "previewAjout"
                     );
@@ -356,14 +390,11 @@ document.addEventListener("DOMContentLoaded", function () {
                     image.style.width = "100%";
                     image.style.borderRadius = "10px";
                     previewAjout.appendChild(image);
-                } else {
-                    afficherMessage("Le format d'image est incorrect");
+
                 }
             };
             reader.readAsDataURL(file);
         });
-
-
 
         titreInput.addEventListener(
             "input",
@@ -373,6 +404,7 @@ document.addEventListener("DOMContentLoaded", function () {
             "change",
             checkInputs
         );
+
 
         // Ajout des écouteurs pour fermer la modale d'ajout de photo
         const closeAjoutModal = document.querySelector(".js-close-ajout-modal");
@@ -409,6 +441,7 @@ document.addEventListener("DOMContentLoaded", function () {
         e.preventDefault();
         overlay.style.display = "none";
         modaleAjoutPhoto.style.display = "none";
+        resetAjoutPhotoModal();
     };
 
     /**
@@ -443,14 +476,19 @@ document.addEventListener("DOMContentLoaded", function () {
         const title = document.getElementById("titre").value;
         const categoryId = document.getElementById("categorie").value;
         const imageId = document.getElementById("image").files[0];
+        const photoInput = document.getElementById("image");
 
-        if (!title || !categoryId || !imageId) {
+        if (!title ||
+            !categoryId ||
+            !imageId ||
+            photoInput.files[0].type !== "image/jpeg" &&
+            photoInput.files[0].type !== "image/png" ||
+            photoInput.files[0].size > 4 * 1024 * 1024) {
             afficherMessage(
                 "Tous les champs du formulaire ne sont pas remplis."
             );
             return;
         }
-
         try {
             const nouveauProjet = new FormData();
             nouveauProjet.append("title", title);
@@ -469,6 +507,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 afficherTravaux();
                 afficherTravauxModale();
                 closeAjoutPhotoModal(event);
+                resetAjoutPhotoModal();
             } else {
                 afficherMessage("Erreur lors de l'ajout du projet.");
             }
@@ -483,11 +522,8 @@ document.addEventListener("DOMContentLoaded", function () {
      * @param {string} message - Le message d'erreur à afficher
      */
     function afficherMessage(message) {
+        clearErrorMessage();
         const boutonValider = document.getElementById("envoyerProjet");
-        const erreurPrecedente = document.querySelector(".message-erreur");
-        if (erreurPrecedente) {
-            erreurPrecedente.remove();
-        }
         const erreurMessage = document.createElement("p");
         erreurMessage.classList.add("message-erreur");
         erreurMessage.textContent = message;
@@ -495,4 +531,14 @@ document.addEventListener("DOMContentLoaded", function () {
         erreurMessage.style.marginBottom = "10px";
         boutonValider.parentNode.insertBefore(erreurMessage, boutonValider);
     }
+    
+
+    // Fonction pour supprimer un message d'erreur précédent
+    function clearErrorMessage() {
+        const erreurPrecedente = document.querySelector(".message-erreur");
+        if (erreurPrecedente) {
+            erreurPrecedente.remove();
+        }
+    };
+
 });
